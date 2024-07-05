@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\Git\OSIO\1\OSIO\settings\OSIO.Build.general.xcl" --backend -f "E:\AnyID\Git\OSIO\1\OSIO\settings\OSIO.Build.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\Git\OSIO\OSIO\OSIO\settings\OSIO.Build.general.xcl" --backend -f "E:\AnyID\Git\OSIO\OSIO\OSIO\settings\OSIO.Build.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\Git\OSIO\1\OSIO\settings\OSIO.Build.general.xcl" --debug_file=$debugfile --backend -f "E:\AnyID\Git\OSIO\1\OSIO\settings\OSIO.Build.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\Git\OSIO\OSIO\OSIO\settings\OSIO.Build.general.xcl" --debug_file=$debugfile --backend -f "E:\AnyID\Git\OSIO\OSIO\OSIO\settings\OSIO.Build.driver.xcl" 
 }
