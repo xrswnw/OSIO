@@ -1,0 +1,578 @@
+###############################################################################
+#
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  05/Jul/2024  17:22:02
+# Copyright 2007-2019 IAR Systems AB.
+#
+#    Output file  =  E:\AnyID\Git\OSIO\1\OSIO\Build\Exe\OSIO.out
+#    Map file     =  E:\AnyID\Git\OSIO\1\OSIO\Build\List\OSIO.map
+#    Command line =
+#        -f C:\Users\swnw\AppData\Local\Temp\EW5FD1.tmp
+#        (E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_FRam.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_AD.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_AD_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_Device.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_Fire_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_FRam.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_FRam_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_R485.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_R485_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_SysCfg.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_SysTick_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_Water_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_SM5003_WDG_HL.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_Stdlib.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\AnyID_Uart_Receive.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\croutine.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\event_groups.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\heap_4.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\list.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\main.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\misc.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\port.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\portasm.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\queue.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\startup_stm32f10x_hd.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_adc.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_dma.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_exti.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_flash.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_gpio.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_it.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_iwdg.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_rcc.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_spi.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_tim.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stm32f10x_usart.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\stream_buffer.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\system_stm32f10x.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\tasks.o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Obj\timers.o --redirect
+#        _Printf=_PrintfFull --redirect _Scanf=_ScanfFull --no_out_extension -o
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\Exe\OSIO.out --map
+#        E:\AnyID\Git\OSIO\1\OSIO\Build\List\OSIO.map --config
+#        E:\AnyID\Git\OSIO\1\OSIO\GD32F103x8.icf --semihosting --entry
+#        __iar_program_start --vfe --text_out locale)
+#
+###############################################################################
+
+*******************************************************************************
+*** RUNTIME MODEL ATTRIBUTES
+***
+
+CppFlavor       = *
+__SystemLibrary = DLib
+__dlib_version  = 6
+
+
+*******************************************************************************
+*** HEAP SELECTION
+***
+
+The basic heap was selected because no calls to memory allocation
+functions were found in the application outside of system library
+functions, and there are calls to deallocation functions in the
+application.
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A0":  place at address 0x800'4000 { ro section .intvec };
+"P1":  place in [from 0x800'4000 to 0x800'ffff] { ro };
+define block CSTACK with size = 4608, alignment = 8 { };
+define block HEAP with size = 4608, alignment = 8 { };
+"P2":  place in [from 0x2000'0000 to 0x2000'4fff] {
+          rw, block CSTACK, block HEAP };
+initialize by copy { rw };
+
+  Section            Kind         Address    Size  Object
+  -------            ----         -------    ----  ------
+"A0":                                       0x130
+  .intvec            ro code   0x800'4000   0x130  startup_stm32f10x_hd.o [1]
+                             - 0x800'4130   0x130
+
+"P1", part 1 of 2:                          0x866
+  .text              ro code   0x800'4130   0x4b4  AnyID_SM5003_Device.o [1]
+  .text              ro code   0x800'45e4    0xb4  AnyID_SM5003_Fire_HL.o [1]
+  .text              ro code   0x800'4698    0x80  AnyID_SM5003_Water_HL.o [1]
+  .text              ro code   0x800'4718    0x48  AnyID_Stdlib.o [1]
+  .text              ro code   0x800'4760   0x236  AnyID_FRam.o [1]
+                             - 0x800'4996   0x866
+
+Absolute sections:                           0x32
+  .rodata            const     0x800'5000    0x32  AnyID_SM5003_Device.o [1]
+                             - 0x800'5032    0x32
+
+"P1", part 2 of 2:                         0x211e
+  .text              ro code   0x800'5032    0x3a  zero_init3.o [3]
+  .text              ro code   0x800'506c    0x66  ABImemset.o [3]
+  .text              ro code   0x800'50d2    0x2e  copy_init3.o [3]
+  .text              ro code   0x800'5100   0x12c  AnyID_SM5003_FRam.o [1]
+  .text              ro code   0x800'522c   0x220  AnyID_Uart_Receive.o [1]
+  .text              ro code   0x800'544c   0x178  stm32f10x_gpio.o [1]
+  .text              ro code   0x800'55c4   0x15e  stm32f10x_tim.o [1]
+  .text              ro code   0x800'5724   0x228  AnyID_SM5003_FRam_HL.o [1]
+  .text              ro code   0x800'594c    0xa6  ABImemcpy.o [3]
+  .text              ro code   0x800'59f4   0x48a  AnyID_SM5003_SysCfg.o [1]
+  .text              ro code   0x800'5e80   0x338  stm32f10x_rcc.o [1]
+  .text              ro code   0x800'61b8    0x2c  stm32f10x_flash.o [1]
+  .text              ro code   0x800'61e4    0xb8  misc.o [1]
+  .text              ro code   0x800'629c    0xa4  AnyID_SM5003_SysTick_HL.o [1]
+  .text              ro code   0x800'6340    0xac  AnyID_SM5003_R485.o [1]
+  .text              ro code   0x800'63ec   0x24e  stm32f10x_usart.o [1]
+  .text              ro code   0x800'663c   0x278  AnyID_SM5003_R485_HL.o [1]
+  .text              ro code   0x800'68b4   0x17c  stm32f10x_dma.o [1]
+  .text              ro code   0x800'6a30   0x250  tasks.o [1]
+  .text              ro code   0x800'6c80   0x110  system_stm32f10x.o [1]
+  .text              ro code   0x800'6d90    0xb8  stm32f10x_it.o [1]
+  CODE               ro code   0x800'6e48    0x88  portasm.o [1]
+  .text              ro code   0x800'6ed0    0x2c  port.o [1]
+  .text              ro code   0x800'6efc    0x28  data_init.o [3]
+  .iar.init_table    const     0x800'6f24    0x24  - Linker created -
+  .text              ro code   0x800'6f48    0x20  main.o [1]
+  .text              ro code   0x800'6f68    0x1e  cmain.o [3]
+  .text              ro code   0x800'6f86     0x4  low_level_init.o [2]
+  .text              ro code   0x800'6f8a     0x4  exit.o [2]
+  .text              ro code   0x800'6f90     0xa  cexit.o [3]
+  .text              ro code   0x800'6f9c    0x14  exit.o [4]
+  Initializer bytes  const     0x800'6fb0    0x14  <for P2-1>
+  .text              ro code   0x800'6fc4    0x10  startup_stm32f10x_hd.o [1]
+  .rodata            const     0x800'6fd4     0xc  AnyID_SM5003_Fire_HL.o [1]
+  .text              ro code   0x800'6fe0     0xc  cstartup_M.o [3]
+  .rodata            const     0x800'6fec     0x8  AnyID_SM5003_Fire_HL.o [1]
+  .rodata            const     0x800'6ff4     0x8  AnyID_SM5003_Fire_HL.o [1]
+  .rodata            const     0x800'6ffc     0x8  AnyID_SM5003_FRam_HL.o [1]
+  .rodata            const     0x800'7004     0x8  AnyID_SM5003_FRam_HL.o [1]
+  .rodata            const     0x800'700c     0x8  AnyID_SM5003_R485_HL.o [1]
+  .rodata            const     0x800'7014     0x8  AnyID_SM5003_R485_HL.o [1]
+  .rodata            const     0x800'701c     0x8  AnyID_SM5003_R485_HL.o [1]
+  .rodata            const     0x800'7024     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'702c     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'7034     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'703c     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'7044     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'704c     0x8  AnyID_SM5003_SysCfg.o [1]
+  .rodata            const     0x800'7054     0x8  AnyID_SM5003_Water_HL.o [1]
+  .rodata            const     0x800'705c     0x8  AnyID_SM5003_Water_HL.o [1]
+  .rodata            const     0x800'7064     0x8  AnyID_SM5003_Water_HL.o [1]
+  .text              ro code   0x800'706c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7070     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7074     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7078     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'707c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7080     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7084     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7088     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'708c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7090     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7094     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7098     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'709c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70a0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70a4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70a8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70ac     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70b0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70b4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70b8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70bc     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70c0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70c4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70c8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70cc     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70d0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70d4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70d8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70dc     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70e0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70e4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70e8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70ec     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70f0     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70f4     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70f8     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'70fc     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7100     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7104     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7108     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'710c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7110     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7114     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7118     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'711c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7120     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7124     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7128     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'712c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7130     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7134     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7138     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'713c     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7140     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7144     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'7148     0x4  startup_stm32f10x_hd.o [1]
+  .text              ro code   0x800'714c     0x4  startup_stm32f10x_hd.o [1]
+  .rodata            const     0x800'7150     0x0  zero_init3.o [3]
+  .rodata            const     0x800'7150     0x0  copy_init3.o [3]
+                             - 0x800'7150  0x211e
+
+"P2", part 1 of 3:                           0x14
+  P2-1                        0x2000'0000    0x14  <Init block>
+    .data            inited   0x2000'0000    0x10  stm32f10x_rcc.o [1]
+    .data            inited   0x2000'0010     0x4  stm32f10x_rcc.o [1]
+                            - 0x2000'0014    0x14
+
+"P2", part 2 of 3:                          0x948
+  .bss               zero     0x2000'0014   0x26c  tasks.o [1]
+  .bss               zero     0x2000'0280   0x228  AnyID_SM5003_R485.o [1]
+  .bss               zero     0x2000'04a8   0x224  AnyID_SM5003_R485.o [1]
+  .bss               zero     0x2000'06cc   0x224  AnyID_Uart_Receive.o [1]
+  .bss               zero     0x2000'08f0    0x14  AnyID_SM5003_Device.o [1]
+  .bss               zero     0x2000'0904     0x8  AnyID_SM5003_Device.o [1]
+  .bss               zero     0x2000'090c     0x8  AnyID_SM5003_FRam.o [1]
+  .bss               zero     0x2000'0914     0x8  AnyID_SM5003_Water_HL.o [1]
+  .bss               zero     0x2000'091c     0x4  AnyID_SM5003_SysCfg.o [1]
+  .bss               zero     0x2000'0920     0x4  AnyID_SM5003_SysCfg.o [1]
+  .bss               zero     0x2000'0924     0x4  AnyID_SM5003_SysTick_HL.o [1]
+  .bss               zero     0x2000'0928     0x4  AnyID_SM5003_SysTick_HL.o [1]
+  .bss               zero     0x2000'092c     0x4  tasks.o [1]
+  .bss               zero     0x2000'0930     0x4  tasks.o [1]
+  .bss               zero     0x2000'0934     0x4  tasks.o [1]
+  .bss               zero     0x2000'0938     0x4  tasks.o [1]
+  .bss               zero     0x2000'093c     0x4  tasks.o [1]
+  .bss               zero     0x2000'0940     0x4  tasks.o [1]
+  .bss               zero     0x2000'0944     0x4  tasks.o [1]
+  .bss               zero     0x2000'0948     0x4  tasks.o [1]
+  .bss               zero     0x2000'094c     0x4  tasks.o [1]
+  .bss               zero     0x2000'0950     0x4  tasks.o [1]
+  .bss               zero     0x2000'0954     0x2  AnyID_SM5003_Fire_HL.o [1]
+  .bss               zero     0x2000'0956     0x2  stm32f10x_it.o [1]
+  .bss               zero     0x2000'0958     0x2  stm32f10x_it.o [1]
+  .bss               zero     0x2000'095a     0x1  AnyID_SM5003_SysCfg.o [1]
+  .bss               zero     0x2000'095b     0x1  AnyID_SM5003_SysCfg.o [1]
+                            - 0x2000'095c   0x948
+
+"P2", part 3 of 3:                         0x1200
+  CSTACK                      0x2000'0960  0x1200  <Block>
+    CSTACK           uninit   0x2000'0960  0x1200  <Block tail>
+                            - 0x2000'1b60  0x1200
+
+Unused ranges:
+
+         From           To    Size
+         ----           --    ----
+   0x800'4996   0x800'4fff   0x66a
+   0x800'7150   0x800'ffff  0x8eb0
+  0x2000'095c  0x2000'095f     0x4
+  0x2000'1b60  0x2000'4fff  0x34a0
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+          Address      Size
+          -------      ----
+Zero (__iar_zero_init3)
+    1 destination range, total size 0x948:
+          0x2000'0014  0x948
+
+Copy (__iar_copy_init3)
+    1 source range, total size 0x14:
+           0x800'6fb0   0x14
+    1 destination range, total size 0x14:
+          0x2000'0000   0x14
+
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module                     ro code  ro data  rw data  ro data
+                                                           (abs)
+    ------                     -------  -------  -------  -------
+command line/config:
+    -------------------------------------------------------------
+    Total:
+
+E:\AnyID\Git\OSIO\1\OSIO\Build\Obj: [1]
+    AnyID_FRam.o                   566
+    AnyID_SM5003_Device.o        1'204                28       50
+    AnyID_SM5003_FRam.o            300                 8
+    AnyID_SM5003_FRam_HL.o         552       16
+    AnyID_SM5003_Fire_HL.o         180       28        2
+    AnyID_SM5003_R485.o            172             1'100
+    AnyID_SM5003_R485_HL.o         632       24
+    AnyID_SM5003_SysCfg.o        1'162       48       10
+    AnyID_SM5003_SysTick_HL.o      164                 8
+    AnyID_SM5003_Water_HL.o        128       24        8
+    AnyID_Stdlib.o                  72
+    AnyID_Uart_Receive.o           544               548
+    main.o                          32
+    misc.o                         184
+    port.o                          44
+    portasm.o                      136
+    startup_stm32f10x_hd.o         548
+    stm32f10x_dma.o                380
+    stm32f10x_flash.o               44
+    stm32f10x_gpio.o               376
+    stm32f10x_it.o                 184                 4
+    stm32f10x_rcc.o                824       20       20
+    stm32f10x_tim.o                350
+    stm32f10x_usart.o              590
+    system_stm32f10x.o             272
+    tasks.o                        592               660
+    -------------------------------------------------------------
+    Total:                      10'232      160    2'396       50
+
+dl7M_tlf.a: [2]
+    exit.o                           4
+    low_level_init.o                 4
+    -------------------------------------------------------------
+    Total:                           8
+
+rt7M_tl.a: [3]
+    ABImemcpy.o                    166
+    ABImemset.o                    102
+    cexit.o                         10
+    cmain.o                         30
+    copy_init3.o                    46
+    cstartup_M.o                    12
+    data_init.o                     40
+    zero_init3.o                    58
+    -------------------------------------------------------------
+    Total:                         464
+
+shb_l.a: [4]
+    exit.o                          20
+    -------------------------------------------------------------
+    Total:                          20
+
+    Gaps                            12
+    Linker created                           36    4'608
+-----------------------------------------------------------------
+    Grand Total:                10'736      196    7'004       50
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                       Address   Size  Type      Object
+-----                       -------   ----  ----      ------
+.iar.init_table$$Base    0x800'6f24          --   Gb  - Linker created -
+.iar.init_table$$Limit   0x800'6f48          --   Gb  - Linker created -
+?main                    0x800'6f69         Code  Gb  cmain.o [3]
+ADCPrescTable           0x2000'0010    0x4  Data  Lc  stm32f10x_rcc.o [1]
+APBAHBPrescTable        0x2000'0000   0x10  Data  Lc  stm32f10x_rcc.o [1]
+BusFault_Handler         0x800'6d97    0x2  Code  Gb  stm32f10x_it.o [1]
+CSTACK$$Base            0x2000'0960          --   Gb  - Linker created -
+CSTACK$$Limit           0x2000'1b60          --   Gb  - Linker created -
+DEVICE_VERSION           0x800'5000   0x32  Data  Gb  AnyID_SM5003_Device.o [1]
+DMA1_Channel4_IRQHandler
+                         0x800'6dc1   0x28  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel5_IRQHandler
+                         0x800'6d9d   0x24  Code  Gb  stm32f10x_it.o [1]
+DMA_DeInit               0x800'68b5   0xf0  Code  Gb  stm32f10x_dma.o [1]
+DMA_ITConfig             0x800'69e1   0x18  Code  Gb  stm32f10x_dma.o [1]
+DMA_Init                 0x800'69a5   0x3c  Code  Gb  stm32f10x_dma.o [1]
+DebugMon_Handler         0x800'6d9b    0x2  Code  Gb  stm32f10x_it.o [1]
+Device_Delayms           0x800'4131   0x12  Code  Gb  AnyID_SM5003_Device.o [1]
+Device_OutCtrlInit       0x800'4143    0xc  Code  Gb  AnyID_SM5003_Device.o [1]
+Device_PeriphHandle      0x800'44e9   0xd0  Code  Gb  AnyID_SM5003_Device.o [1]
+Device_ProcessUsrFrame   0x800'4243  0x2a6  Code  Gb  AnyID_SM5003_Device.o [1]
+Device_ReadDeviceParamenter
+                         0x800'4181   0xc2  Code  Gb  AnyID_SM5003_Device.o [1]
+Device_WriteDeviceParamenter
+                         0x800'414f   0x32  Code  Gb  AnyID_SM5003_Device.o [1]
+EG_CTLx_COM              0x800'6fec    0x8  Data  Gb  AnyID_SM5003_Fire_HL.o [1]
+FLASH_PrefetchBufferCmd
+                         0x800'61cb   0x14  Code  Gb  stm32f10x_flash.o [1]
+FLASH_SetLatency         0x800'61b9   0x12  Code  Gb  stm32f10x_flash.o [1]
+FRAM_SCL_PORT            0x800'7004    0x8  Data  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRAM_SDA_PORT            0x800'6ffc    0x8  Data  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_Delayms             0x800'576f   0x12  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CAck              0x800'5809   0x30  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CDelay            0x800'5761    0xe  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CNoAck            0x800'5839   0x30  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CReceiveByte      0x800'58f5   0x4e  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CSendByte         0x800'58ab   0x4a  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CStart            0x800'5781   0x58  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CStop             0x800'57d9   0x30  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_I2CWaitAck          0x800'5869   0x42  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_InitInterface       0x800'5725   0x3c  Code  Gb  AnyID_SM5003_FRam_HL.o [1]
+FRam_ReadBuffer          0x800'4761   0xe2  Code  Gb  AnyID_FRam.o [1]
+FRam_WriteBuffer         0x800'48ef   0xa8  Code  Gb  AnyID_FRam.o [1]
+FRam_WritePage           0x800'4843   0xac  Code  Gb  AnyID_FRam.o [1]
+Fire_Init                0x800'4605   0x7a  Code  Gb  AnyID_SM5003_Fire_HL.o [1]
+Fire_Interface           0x800'45e5   0x20  Code  Gb  AnyID_SM5003_Fire_HL.o [1]
+Fram_ReadBootParamenter
+                         0x800'5101   0xe8  Code  Gb  AnyID_SM5003_FRam.o [1]
+Fram_WriteBootParamenter
+                         0x800'51e9   0x3e  Code  Gb  AnyID_SM5003_FRam.o [1]
+GPIO_Init                0x800'544d   0xea  Code  Gb  stm32f10x_gpio.o [1]
+GPIO_PinRemapConfig      0x800'5537   0x84  Code  Gb  stm32f10x_gpio.o [1]
+HardFault_Handler        0x800'6d93    0x2  Code  Gb  stm32f10x_it.o [1]
+MemManage_Handler        0x800'6d95    0x2  Code  Gb  stm32f10x_it.o [1]
+NMI_Handler              0x800'6d91    0x2  Code  Gb  stm32f10x_it.o [1]
+NVIC_Init                0x800'61ef   0x66  Code  Gb  misc.o [1]
+NVIC_PriorityGroupConfig
+                         0x800'61e5    0xa  Code  Gb  misc.o [1]
+NVIC_SetVectorTable      0x800'6255    0xc  Code  Gb  misc.o [1]
+PWM_SetCompare1          0x800'467f    0x6  Code  Gb  AnyID_SM5003_Fire_HL.o [1]
+PWR_PORT_COM             0x800'6ff4    0x8  Data  Gb  AnyID_SM5003_Fire_HL.o [1]
+PendSV_Handler           0x800'6e49         Code  Gb  portasm.o [1]
+R485_ConfigInt           0x800'670b   0x2e  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_DisableTxDma        0x800'6869   0x24  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_EnableTxDma         0x800'6841   0x28  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_Init                0x800'6341   0x40  Code  Gb  AnyID_SM5003_R485.o [1]
+R485_InitInterface       0x800'663d   0xce  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_InitRxDma           0x800'67ab   0x96  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_InitTxDma           0x800'6739   0x72  Code  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_PORT_CTRL           0x800'701c    0x8  Data  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_PORT_RX             0x800'7014    0x8  Data  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_PORT_TX             0x800'700c    0x8  Data  Gb  AnyID_SM5003_R485_HL.o [1]
+R485_Stop                0x800'6381   0x4e  Code  Gb  AnyID_SM5003_R485.o [1]
+RCC_ADCCLKConfig         0x800'5fad   0x10  Code  Gb  stm32f10x_rcc.o [1]
+RCC_AHBPeriphClockCmd    0x800'6095   0x1c  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB1PeriphClockCmd   0x800'60cd   0x1c  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB1PeriphResetCmd   0x800'6105   0x1c  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB2PeriphClockCmd   0x800'60b1   0x1c  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB2PeriphResetCmd   0x800'60e9   0x1c  Code  Gb  stm32f10x_rcc.o [1]
+RCC_DeInit               0x800'5e81   0x40  Code  Gb  stm32f10x_rcc.o [1]
+RCC_GetClocksFreq        0x800'5fbd   0xd8  Code  Gb  stm32f10x_rcc.o [1]
+RCC_GetFlagStatus        0x800'6121   0x46  Code  Gb  stm32f10x_rcc.o [1]
+RCC_GetSYSCLKSource      0x800'5f6b    0xa  Code  Gb  stm32f10x_rcc.o [1]
+RCC_HCLKConfig           0x800'5f75   0x10  Code  Gb  stm32f10x_rcc.o [1]
+RCC_HSEConfig            0x800'5ec1   0x3a  Code  Gb  stm32f10x_rcc.o [1]
+RCC_PCLK1Config          0x800'5f85   0x10  Code  Gb  stm32f10x_rcc.o [1]
+RCC_PCLK2Config          0x800'5f95   0x12  Code  Gb  stm32f10x_rcc.o [1]
+RCC_PLLCmd               0x800'5f51    0xa  Code  Gb  stm32f10x_rcc.o [1]
+RCC_PLLConfig            0x800'5f39   0x18  Code  Gb  stm32f10x_rcc.o [1]
+RCC_SYSCLKConfig         0x800'5f5b   0x10  Code  Gb  stm32f10x_rcc.o [1]
+RCC_USBCLKConfig         0x800'5fa7    0x6  Code  Gb  stm32f10x_rcc.o [1]
+RCC_WaitForHSEStartUp    0x800'5efb   0x3e  Code  Gb  stm32f10x_rcc.o [1]
+Region$$Table$$Base      0x800'6f24          --   Gb  - Linker created -
+Region$$Table$$Limit     0x800'6f48          --   Gb  - Linker created -
+STick_InitSysTick        0x800'62f9   0x26  Code  Gb  AnyID_SM5003_SysTick_HL.o [1]
+SVC_Handler              0x800'6e8f         Code  Gb  portasm.o [1]
+SYS_ADDR_COM0            0x800'7024    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SYS_ADDR_COM1            0x800'702c    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SYS_ADDR_COM2            0x800'7034    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SYS_ALARMLED_COM         0x800'7044    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SYS_PROTECT_COM          0x800'704c    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SYS_RUNLED_COM           0x800'703c    0x8  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+SetSysClock              0x800'6cbd    0x8  Code  Lc  system_stm32f10x.o [1]
+SetSysClockTo72          0x800'6cc5   0xb0  Code  Lc  system_stm32f10x.o [1]
+SysTick_CLKSourceConfig
+                         0x800'6261   0x1c  Code  Gb  misc.o [1]
+SysTick_Config           0x800'62c9   0x30  Code  Lc  AnyID_SM5003_SysTick_HL.o [1]
+SysTick_Handler          0x800'6ed1   0x28  Code  Gb  port.o [1]
+Sys_ADTask               0x800'5dc3    0x2  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_CfgClock             0x800'5a07   0x78  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_CfgNVIC              0x800'5aa5   0x18  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_CfgPeriphClk         0x800'5a7f   0x26  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_CheckSensorTask      0x800'5dc5   0x3e  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_CtrlIOInit           0x800'5b21   0x6a  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_Delayms              0x800'59f5   0x12  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_GetDeviceAddr        0x800'5abd   0x64  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_Init                 0x800'5b8b   0x64  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_LedTask              0x800'5bef   0xc2  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_LedTask::index      0x2000'095b    0x1  Data  Lc  AnyID_SM5003_SysCfg.o [1]
+Sys_LedTask::state      0x2000'095a    0x1  Data  Lc  AnyID_SM5003_SysCfg.o [1]
+Sys_OutCtrlTask          0x800'5e03   0x18  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_R485Task             0x800'5cb1  0x112  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+Sys_RecordTask           0x800'5e7d    0x2  Code  Gb  AnyID_SM5003_SysCfg.o [1]
+SystemInit               0x800'6c81   0x3c  Code  Gb  system_stm32f10x.o [1]
+TIM_Cmd                  0x800'56f1   0x1e  Code  Gb  stm32f10x_tim.o [1]
+TIM_OC1PreloadConfig     0x800'570f   0x14  Code  Gb  stm32f10x_tim.o [1]
+TIM_OC2Init              0x800'5641   0x88  Code  Gb  stm32f10x_tim.o [1]
+TIM_TimeBaseInit         0x800'55c5   0x7c  Code  Gb  stm32f10x_tim.o [1]
+USART1_IRQHandler        0x800'6de9   0x3a  Code  Gb  stm32f10x_it.o [1]
+USART_ClearFlag          0x800'662b   0x10  Code  Gb  stm32f10x_usart.o [1]
+USART_Cmd                0x800'6569   0x1e  Code  Gb  stm32f10x_usart.o [1]
+USART_DMACmd             0x800'65f7   0x18  Code  Gb  stm32f10x_usart.o [1]
+USART_DeInit             0x800'63ed   0x90  Code  Gb  stm32f10x_usart.o [1]
+USART_GetFlagStatus      0x800'660f   0x1c  Code  Gb  stm32f10x_usart.o [1]
+USART_ITConfig           0x800'6587   0x70  Code  Gb  stm32f10x_usart.o [1]
+USART_Init               0x800'647d   0xd6  Code  Gb  stm32f10x_usart.o [1]
+Uart_UsrCheckFrame       0x800'534f   0xfe  Code  Gb  AnyID_Uart_Receive.o [1]
+Uart_UsrResponseFrame    0x800'522d  0x122  Code  Gb  AnyID_Uart_Receive.o [1]
+UsageFault_Handler       0x800'6d99    0x2  Code  Gb  stm32f10x_it.o [1]
+WATER_POSITION_COM       0x800'7054    0x8  Data  Gb  AnyID_SM5003_Water_HL.o [1]
+WATER_PROTECT_COM        0x800'705c    0x8  Data  Gb  AnyID_SM5003_Water_HL.o [1]
+WATER_PUMP_CTRL_COM      0x800'7064    0x8  Data  Gb  AnyID_SM5003_Water_HL.o [1]
+Water_GetPeriphInfo      0x800'46e5   0x26  Code  Gb  AnyID_SM5003_Water_HL.o [1]
+Water_Interface          0x800'4699   0x4c  Code  Gb  AnyID_SM5003_Water_HL.o [1]
+__ICFEDIT_region_RAM_end__ {Abs}
+                        0x2000'4fff         Data  Gb  <internal module>
+__ICFEDIT_region_RAM_start__ {Abs}
+                        0x2000'0000         Data  Gb  <internal module>
+__NVIC_SetPriority       0x800'629d   0x2c  Code  Lc  AnyID_SM5003_SysTick_HL.o [1]
+__aeabi_memcpy           0x800'594d         Code  Gb  ABImemcpy.o [3]
+__aeabi_memcpy4          0x800'596d         Code  Gb  ABImemcpy.o [3]
+__aeabi_memcpy8          0x800'596d         Code  Gb  ABImemcpy.o [3]
+__aeabi_memset           0x800'506d         Code  Gb  ABImemset.o [3]
+__cmain                  0x800'6f69         Code  Gb  cmain.o [3]
+__exit                   0x800'6f9d   0x14  Code  Gb  exit.o [4]
+__iar_Memset             0x800'506d         Code  Gb  ABImemset.o [3]
+__iar_Memset_word        0x800'5075         Code  Gb  ABImemset.o [3]
+__iar_copy_init3         0x800'50d3   0x2e  Code  Gb  copy_init3.o [3]
+__iar_data_init3         0x800'6efd   0x28  Code  Gb  data_init.o [3]
+__iar_program_start      0x800'6fe1         Code  Gb  cstartup_M.o [3]
+__iar_zero_init3         0x800'5033   0x3a  Code  Gb  zero_init3.o [3]
+__low_level_init         0x800'6f87    0x4  Code  Gb  low_level_init.o [2]
+__vector_table           0x800'4000         Data  Gb  startup_stm32f10x_hd.o [1]
+_call_main               0x800'6f75         Code  Gb  cmain.o [3]
+_exit                    0x800'6f91         Code  Gb  cexit.o [3]
+_main                    0x800'6f83         Code  Gb  cmain.o [3]
+a_GetCrc                 0x800'4719   0x48  Code  Gb  AnyID_Stdlib.o [1]
+exit                     0x800'6f8b    0x4  Code  Gb  exit.o [2]
+g_aMapTal                0x800'6fd4    0xc  Data  Gb  AnyID_SM5003_Fire_HL.o [1]
+g_nLedTimes             0x2000'0920    0x4  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+g_nR485Dr               0x2000'0958    0x2  Data  Gb  stm32f10x_it.o [1]
+g_nR485Sr               0x2000'0956    0x2  Data  Gb  stm32f10x_it.o [1]
+g_nSysDelay             0x2000'0928    0x4  Data  Gb  AnyID_SM5003_SysTick_HL.o [1]
+g_nSysState             0x2000'091c    0x4  Data  Gb  AnyID_SM5003_SysCfg.o [1]
+g_nSysTick              0x2000'0924    0x4  Data  Gb  AnyID_SM5003_SysTick_HL.o [1]
+g_sDeviceParams         0x2000'0904    0x8  Data  Gb  AnyID_SM5003_Device.o [1]
+g_sDeviceStatInfo       0x2000'08f0   0x14  Data  Gb  AnyID_SM5003_Device.o [1]
+g_sFireEgInfo           0x2000'0954    0x2  Data  Gb  AnyID_SM5003_Fire_HL.o [1]
+g_sFramBootParamenter   0x2000'090c    0x8  Data  Gb  AnyID_SM5003_FRam.o [1]
+g_sR485RcvFrame         0x2000'04a8  0x224  Data  Gb  AnyID_SM5003_R485.o [1]
+g_sR485TxFrame          0x2000'0280  0x228  Data  Gb  AnyID_SM5003_R485.o [1]
+g_sUartTempRcvFrame     0x2000'06cc  0x224  Data  Gb  AnyID_Uart_Receive.o [1]
+g_sWaterIngo            0x2000'0914    0x8  Data  Gb  AnyID_SM5003_Water_HL.o [1]
+main                     0x800'6f49   0x20  Code  Gb  main.o [1]
+prvResetNextTaskUnblockTime
+                         0x800'6c41   0x22  Code  Lc  tasks.o [1]
+pxCurrentTCB            0x2000'092c    0x4  Data  Gb  tasks.o [1]
+pxDelayedTaskList       0x2000'0930    0x4  Data  Lc  tasks.o [1]
+pxOverflowDelayedTaskList
+                        0x2000'0934    0x4  Data  Lc  tasks.o [1]
+pxReadyTasksLists       0x2000'0014  0x26c  Data  Lc  tasks.o [1]
+uxSchedulerSuspended    0x2000'0950    0x4  Data  Lc  tasks.o [1]
+uxTopReadyPriority      0x2000'093c    0x4  Data  Lc  tasks.o [1]
+vPortStartFirstTask      0x800'6eaf         Code  Gb  portasm.o [1]
+vTaskSwitchContext       0x800'6bb9   0x72  Code  Gb  tasks.o [1]
+xNextTaskUnblockTime    0x2000'094c    0x4  Data  Lc  tasks.o [1]
+xNumOfOverflows         0x2000'0948    0x4  Data  Lc  tasks.o [1]
+xPendedTicks            0x2000'0940    0x4  Data  Lc  tasks.o [1]
+xTaskIncrementTick       0x800'6a31  0x188  Code  Gb  tasks.o [1]
+xTickCount              0x2000'0938    0x4  Data  Lc  tasks.o [1]
+xYieldPending           0x2000'0944    0x4  Data  Lc  tasks.o [1]
+
+
+[1] = E:\AnyID\Git\OSIO\1\OSIO\Build\Obj
+[2] = dl7M_tlf.a
+[3] = rt7M_tl.a
+[4] = shb_l.a
+
+  10'736 bytes of readonly  code memory
+     196 bytes of readonly  data memory (+ 50 absolute)
+   7'004 bytes of readwrite data memory
+
+Errors: none
+Warnings: none

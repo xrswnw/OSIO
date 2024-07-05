@@ -1,0 +1,122 @@
+#include "AnyID_SM5003_AD.h"
+
+#define AD_TMPR_LV_NUM          110   
+#define AD_TMPR_MIN             -20  
+u16 const g_aADTmprBuf[AD_TMPR_LV_NUM] = { 
+62, 66, 70, 74, 78, 83, 88, 93, 98, 103, 109, 115, 
+121, 128, 135, 142, 150, 158, 166, 174, 183, 193, 
+202, 213, 223, 234, 246, 257, 270, 283, 296, 310, 
+324, 339, 354, 370, 387, 404, 422, 440, 459, 479, 
+499, 520, 541, 564, 587, 610, 634, 659, 685, 712, 
+739, 767, 795, 825, 855, 885, 917, 949, 982, 1016, 
+1051, 1086, 1122, 1158, 1196, 1234, 1273, 1312, 
+1352, 1393, 1434, 1476, 1519, 1562, 1606, 1650, 
+1695, 1740, 1786, 1833, 1879, 1926, 1974, 2022, 
+2070, 2119, 2168, 2217, 2266, 2316, 2365, 2415, 
+2465, 2515, 2566, 2616, 2666, 2716, 2766, 2816, 
+2866, 2916, 2966, 3015, 3064, 3113, 3162, 3211,
+};
+void Win_CalAvg(WINAVG_INFO *pInfo, u32 value)
+{
+    pInfo->index++;
+    pInfo->sum -= pInfo->buffer[pInfo->index & 0x0F];
+    if(pInfo->index == 0)
+    {
+        pInfo->index = WIN_SAMPLE_NUM;
+    }
+    pInfo->buffer[pInfo->index & 0x0F] = value;
+    pInfo->sum += value;
+    if(pInfo->index >= WIN_SAMPLE_NUM)
+    {
+        pInfo->avg = pInfo->sum >> 4;
+    }
+    else
+    {
+        pInfo->avg = pInfo->sum / pInfo->index;
+    }
+}
+
+void AD_GetTmpr(WINAVG_INFO *pInfo)
+{
+    u8 i = 0;
+    pInfo->t = AD_TMPR_MIN;
+    for(i = 0; i < AD_TMPR_LV_NUM; i++)
+    {
+        if(pInfo->avg < g_aADTmprBuf[i])
+        {
+            break;
+        }
+    }
+    pInfo->t += i;
+}
+
+BOOL AD_CheckAlarm(WINAVG_INFO *pInfo, u8 tick, int alarmValue)
+{
+	/*
+    BOOL b = TRUE;
+    if(pInfo->t >= alarmValue)
+    {
+        pInfo->alarmTick++;
+        if(pInfo->alarmTick < AD_CHECK_ALARM_TME)
+        {
+            b = FALSE;
+        }
+    }
+    else if(pInfo->alarmTick > 0)
+    {
+        if(pInfo->t + AD_ALARM_THRD < alarmValue)
+        {
+            pInfo->alarmTick = 0;
+            b = FALSE;
+        }
+    }
+    else
+    {
+        b = FALSE;
+    }
+	*/
+	
+	
+	BOOL bOk = FALSE;
+	
+    if(pInfo->t & 0x80000000 != 0x80000000)
+	{
+        if(!pInfo->alarmFlag)										//温度未报警
+        {
+            if(pInfo->t >= alarmValue)
+            {
+                pInfo->alarmTick++;
+                if(pInfo->alarmTick >= tick)
+                {
+                    bOk = TRUE;
+                    pInfo->alarmFlag = TRUE;
+                }
+            }
+            else
+            {
+                pInfo->alarmFlag = FALSE;
+                pInfo->alarmTick = 0;
+            }
+        }
+        else											//温度报警启用，低于部分差阈值再停止，防抖动
+        {
+            if(pInfo->t + AD_ALARM_THRD >= alarmValue)
+            {
+                pInfo->alarmTick++;
+                if(pInfo->alarmTick >= tick)
+                {
+                    bOk = TRUE;
+                    pInfo->alarmFlag = TRUE;
+                }
+            }
+            else
+            {
+                pInfo->alarmFlag = FALSE;
+                pInfo->alarmTick = 0;
+            }
+        }
+	}
+	
+	
+    return bOk;
+}
