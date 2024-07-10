@@ -225,7 +225,6 @@
                     <state>_ANYID_GD32_</state>
                     <state>_ANYID_HSE12P00_</state>
                     <state>_ANYID_SM5003_</state>
-                    <state>_ANYID_BOOT_STM32_</state>
                     <state>USE_FREE_RTOS</state>
                 </option>
                 <option>

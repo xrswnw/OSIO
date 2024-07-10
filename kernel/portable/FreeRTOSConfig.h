@@ -59,6 +59,10 @@ errata. */
 #define configIDLE_SHOULD_YIELD					1									//空闲任务是否让步(每执行一次空闲任务，查看一次是否有高优先级任务)
 #define configSUPPORT_STATIC_ALLOCATION			0								   //是否需要使用静态队列
 
+
+#define configSUPPORT_DYNAMIC_ALLOCATION		1									//使用动态任务创建方式（堆栈由系统分配）
+#define configSUPPORT_STATIC_ALLOCATION			0									//不使用静态任务创建方式（堆栈自身分配）、使能空闲任务需存在
+
 #define configUSE_IDLE_HOOK						0									//空闲任务狗子
 #define configUSE_TICK_HOOK						0                                   //滴答定时器狗子
 #define configCPU_CLOCK_HZ						( SystemCoreClock )					//对应MCU主频
@@ -70,7 +74,7 @@ errata. */
 #define configUSE_TRACE_FACILITY				1                                   //可视化函数跟踪
 #define configUSE_16_BIT_TICKS					0                                   //滴答定时器范围。1 ：u16; 0 : u32
 #define configTICK_TYPE_WIDTH_IN_BITS           TICK_TYPE_WIDTH_32_BITS             //滴答“s”执行的次数。32位
-
+#define configUSE_TICKLESS_IDLE                 0                                   //低功耗模式
 #define configUSE_MUTEXES						1
 #define configQUEUE_REGISTRY_SIZE				8
 //#define configCHECK_FOR_STACK_OVERFLOW			2
@@ -93,11 +97,12 @@ errata. */
 to exclude the API function. */
 #define INCLUDE_vTaskPrioritySet		1
 #define INCLUDE_uxTaskPriorityGet		1
-#define INCLUDE_vTaskDelete				1
+#define INCLUDE_vTaskDelete				1											//任务删除允许 
+#define INCLUDE_uxTaskGetStackHighWaterMark		1									//允许获取任务堆栈历史剩余最小值
 #define INCLUDE_vTaskCleanUpResources	1
-#define INCLUDE_vTaskSuspend			1
-#define INCLUDE_vTaskDelayUntil			1
-#define INCLUDE_vTaskDelay				1
+#define INCLUDE_vTaskSuspend			1											//允许挂起
+#define INCLUDE_vTaskDelayUntil			1											//允许任务绝对时间堵塞
+#define INCLUDE_vTaskDelay				1											//允许任务堵塞
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS

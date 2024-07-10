@@ -3,13 +3,10 @@
 int main(void)
 {
     Sys_Init();
-    while(1)
-    {
-        Sys_LedTask();
-        Sys_R485Task();
-        Sys_CheckSensorTask();
-        Sys_ADTask();
-        Sys_OutCtrlTask();
-        Sys_RecordTask();
-    }
+
+    //xTaskCreate(Device_LedTask, DEVICE_TASK_LED, configMINIMAL_STACK_SIZE, NULL, 0, NULL);
+      	xTaskCreate(Device_TaskCreat, "Device_TaskCreat", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    vTaskStartScheduler();              //µ÷¶ÈÆ÷ÆôÓÃ
+    
+    return 0;
 }

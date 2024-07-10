@@ -78,7 +78,9 @@ void Sys_CfgPeriphClk(FunctionalState state)
 {
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, state);
     
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, state);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 |
+                           RCC_APB1Periph_TIM4 |
+                           RCC_APB1Periph_TIM2, state);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
                            RCC_APB2Periph_GPIOB |
                            RCC_APB2Periph_GPIOC |
@@ -179,108 +181,26 @@ void Sys_Init(void)
     Sys_CfgClock();
     Sys_CfgNVIC();
     Sys_CfgPeriphClk(ENABLE);
-
+    
 #if SYS_ENABLE_WDT
     WDG_InitIWDG();
 #endif
 	Sys_Delayms(500);
-
+    Sys_Delayms(500);
+    Sys_Delayms(500);
+    Sys_Delayms(500);
     Sys_DisableInt();
-    Sys_CtrlIOInit();
     
-    Sys_RunLedOn();
-    Sys_AlarmLedOn();
-	
-    #if SYS_ENABLE_WDT
-        WDG_FeedIWDog();
-    #endif
-        
-    FRam_InitInterface();
-    Device_ReadDeviceParamenter();
-	g_sDeviceParams.addr = Sys_GetDeviceAddr() + SYS_ADDR_BASE_ADDR;
-    Device_OutCtrlInit();
-    Water_Interface();
-
-    STick_InitSysTick();
-    
-    Fire_Init();
-    
-    
-    R485_Init();
-
-    Sys_RunLedOff();
-    Sys_AlarmLedOff();
+    Device_CtrlIOInit();
     
     Sys_EnableInt();
 }
 
-u32 g_nLedTimes = 0;
+
  
-void Sys_LedTask(void)
-{
-    static u8 state = 0, index = 0;
-    if(a_CheckStateBit(g_nSysState, SYS_STAT_RUNLED))
-    {
-        a_ClearStateBit(g_nSysState, SYS_STAT_RUNLED);
-        g_nLedTimes++;
-		
-		if(g_sDeviceStatInfo.authrity == DEVICE_AUTHRITY_WATER)
-		{
-			if(g_nLedTimes & 0x02)
-			{
-				Sys_RunLedOn();
-				Sys_AlarmLedOff();//Water_PumpOpen();
-			}
-			else
-			{
-				Sys_AlarmLedOn();
-				Sys_RunLedOff();//Water_PumpClose();
-			}
-		}
-		else
-		{
-			if(g_nLedTimes & 0x10)
-			{
-				Sys_RunLedOn();
-				Sys_AlarmLedOff();//Water_PumpOpen();
-			}
-			else
-			{
-				Sys_AlarmLedOn();
-				Sys_RunLedOff();//Water_PumpClose();
-			}
-		}
-        
-        if(state == 0)
-        {
-            PWM_SetCompare1(index++);
-            if(index >= 100)
-            {
-                index = 100;
-                state = 1;
-            }
-        }
-        else if(state == 1)
-        {
-            PWM_SetCompare1(index--);
-            if(index <= 0)
-            {
-                index = 0;
-                state = 0;
-            }
-        }
-
-#if SYS_ENABLE_WDT
-	WDG_FeedIWDog();
-#endif
-    }
-    
-
-    
- 
-}
 
 
+/*
 void Sys_R485Task(void)
 {
     if(USART_GetFlagStatus(R485_PORT, USART_FLAG_NE | USART_FLAG_FE | USART_FLAG_PE))
@@ -334,51 +254,20 @@ void Sys_R485Task(void)
         }
     }
 }
+*/
 
-
-void Sys_ADTask(void)
+//-----------------------
+u8 g_nTempBuffer[2];
+void Sys_TaskScheduler()
 {
+   //xTaskCreate(Device_LedTask, DEVICE_TASK_LED, configMINIMAL_STACK_SIZE, NULL, 0, NULL);
+
+    
+    
+    
+    
+    
+    //vTaskStartScheduler();              //µ÷¶ÈÆ÷ÆôÓÃ
+    Device_ProcessUsrFrame(g_nTempBuffer);
 
 }
-
-void Sys_CheckSensorTask(void)
-{
-	
-    if(a_CheckStateBit(g_nSysState, SYS_STAT_IN_SENSOR))
-    {
-        a_ClearStateBit(g_nSysState, SYS_STAT_IN_SENSOR);
-		if(g_sWaterIngo.tempState == Water_GetPeriphInfo())
-		{
-			g_sWaterIngo.tick ++;
-			if(g_sWaterIngo.tick >= WATER_SAMPLE_TICK)
-			{
-				g_sWaterIngo.state = g_sWaterIngo.tempState;
-			}
-		}
-		else
-		{
-			g_sWaterIngo.tick = 0;
-			g_sWaterIngo.tempState = Water_GetPeriphInfo();
-		}
-
-    }
-}
-
-
-void Sys_OutCtrlTask(void)
-{
-    if(a_CheckStateBit(g_nSysState, SYS_STAT_CTLOUTPUT))
-    {      
-        a_ClearStateBit(g_nSysState, SYS_STAT_CTLOUTPUT);
-		Device_PeriphHandle();
-    }
-}
-
-
-void Sys_RecordTask(void)
-{
-
-}
-
-
-

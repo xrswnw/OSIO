@@ -254,17 +254,17 @@
  */
 typedef struct tskTaskControlBlock       /* The old naming convention is used to prevent breaking kernel aware debuggers. */
 {
-    volatile StackType_t * pxTopOfStack; /*< Points to the location of the last item placed on the tasks stack.  THIS MUST BE THE FIRST MEMBER OF THE TCB STRUCT. */
+    volatile StackType_t * pxTopOfStack; /*< Points to the location of the last item placed on the tasks stack.  THIS MUST BE THE FIRST MEMBER OF THE TCB STRUCT. */			//任务栈栈顶，必须为TCB第一个成员
 
     #if ( portUSING_MPU_WRAPPERS == 1 )
         xMPU_SETTINGS xMPUSettings; /*< The MPU settings are defined as part of the port layer.  THIS MUST BE THE SECOND MEMBER OF THE TCB STRUCT. */
     #endif
 
-    ListItem_t xStateListItem;                  /*< The list that the state list item of a task is reference from denotes the state of that task (Ready, Blocked, Suspended ). */
-    ListItem_t xEventListItem;                  /*< Used to reference a task from an event list. */
-    UBaseType_t uxPriority;                     /*< The priority of the task.  0 is the lowest priority. */
-    StackType_t * pxStack;                      /*< Points to the start of the stack. */
-    char pcTaskName[ configMAX_TASK_NAME_LEN ]; /*< Descriptive name given to the task when created.  Facilitates debugging only. */ /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+    ListItem_t xStateListItem;                  /*< The list that the state list item of a task is reference from denotes the state of that task (Ready, Blocked, Suspended ). *///状态列表
+    ListItem_t xEventListItem;                  /*< Used to reference a task from an event list. */																				//事件列表
+    UBaseType_t uxPriority;                     /*< The priority of the task.  0 is the lowest priority. */																		//优先级		
+    StackType_t * pxStack;                      /*< Points to the start of the stack. */																						//堆栈首地址
+    char pcTaskName[ configMAX_TASK_NAME_LEN ]; /*< Descriptive name given to the task when created.  Facilitates debugging only. */ /*lint !e971 Unqualified char types are allowed for strings and single characters only. */		//任务名字
 
     #if ( ( portSTACK_GROWTH > 0 ) || ( configRECORD_STACK_HIGH_ADDRESS == 1 ) )
         StackType_t * pxEndOfStack; /*< Points to the highest valid address for the stack. */
@@ -718,12 +718,12 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) PRIVILEGED_FUNCTION;
 
 #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 
-    BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
+    BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,							//指向任务地址
                             const char * const pcName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-                            const configSTACK_DEPTH_TYPE usStackDepth,
-                            void * const pvParameters,
-                            UBaseType_t uxPriority,
-                            TaskHandle_t * const pxCreatedTask )
+                            const configSTACK_DEPTH_TYPE usStackDepth,				//任务堆栈大小，单位 字
+                            void * const pvParameters,								//参数
+                            UBaseType_t uxPriority,									//优先级
+                            TaskHandle_t * const pxCreatedTask )					//句柄，标识，控制块TCB
     {
         TCB_t * pxNewTCB;
         BaseType_t xReturn;
@@ -731,7 +731,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) PRIVILEGED_FUNCTION;
         /* If the stack grows down then allocate the stack then the TCB so the stack
          * does not grow into the TCB.  Likewise if the stack grows up then allocate
          * the TCB then the stack. */
-        #if ( portSTACK_GROWTH > 0 )
+        #if ( portSTACK_GROWTH > 0 )				//栈向上生长
         {
             /* Allocate space for the TCB.  Where the memory comes from depends on
              * the implementation of the port malloc function and whether or not static
@@ -755,7 +755,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) PRIVILEGED_FUNCTION;
                 }
             }
         }
-        #else /* portSTACK_GROWTH */
+        #else /* portSTACK_GROWTH */   				//栈向下生长   STM32
         {
             StackType_t * pxStack;
 
@@ -798,8 +798,8 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) PRIVILEGED_FUNCTION;
             }
             #endif /* tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE */
 
-            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth, pvParameters, uxPriority, pxCreatedTask, pxNewTCB, NULL );
-            prvAddNewTaskToReadyList( pxNewTCB );
+            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth, pvParameters, uxPriority, pxCreatedTask, pxNewTCB, NULL );				//初始化数据块其他成员
+            prvAddNewTaskToReadyList( pxNewTCB );																										//添加此任务入就绪列表
             xReturn = pdPASS;
         }
         else
@@ -844,7 +844,7 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
     #if ( tskSET_NEW_STACKS_TO_KNOWN_VALUE == 1 )
     {
         /* Fill the stack with a known value to assist debugging. */
-        ( void ) memset( pxNewTCB->pxStack, ( int ) tskSTACK_FILL_BYTE, ( size_t ) ulStackDepth * sizeof( StackType_t ) );
+        ( void ) memset( pxNewTCB->pxStack, ( int ) tskSTACK_FILL_BYTE, ( size_t ) ulStackDepth * sizeof( StackType_t ) );				//初始化A5,可判断剩余空间
     }
     #endif /* tskSET_NEW_STACKS_TO_KNOWN_VALUE */
 
@@ -854,7 +854,7 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
      * by the port. */
     #if ( portSTACK_GROWTH < 0 )
     {
-        pxTopOfStack = &( pxNewTCB->pxStack[ ulStackDepth - ( uint32_t ) 1 ] );
+        pxTopOfStack = &( pxNewTCB->pxStack[ ulStackDepth - ( uint32_t ) 1 ] );					//获取栈顶
         pxTopOfStack = ( StackType_t * ) ( ( ( portPOINTER_SIZE_TYPE ) pxTopOfStack ) & ( ~( ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK ) ) ); /*lint !e923 !e9033 !e9078 MISRA exception.  Avoiding casts between pointers and integers is not practical.  Size differences accounted for using portPOINTER_SIZE_TYPE type.  Checked by assert(). */
 
         /* Check the alignment of the calculated top of stack is correct. */
@@ -884,7 +884,7 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
     /* Store the task name in the TCB. */
     if( pcName != NULL )
     {
-        for( x = ( UBaseType_t ) 0; x < ( UBaseType_t ) configMAX_TASK_NAME_LEN; x++ )
+        for( x = ( UBaseType_t ) 0; x < ( UBaseType_t ) configMAX_TASK_NAME_LEN; x++ )					//任务名字
         {
             pxNewTCB->pcTaskName[ x ] = pcName[ x ];
 
@@ -913,9 +913,9 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
     /* This is used as an array index so must ensure it's not too large. */
     configASSERT( uxPriority < configMAX_PRIORITIES );
 
-    if( uxPriority >= ( UBaseType_t ) configMAX_PRIORITIES )
+    if( uxPriority >= ( UBaseType_t ) configMAX_PRIORITIES )						//优先级
     {
-        uxPriority = ( UBaseType_t ) configMAX_PRIORITIES - ( UBaseType_t ) 1U;
+        uxPriority = ( UBaseType_t ) configMAX_PRIORITIES - ( UBaseType_t ) 1U;			//大于最大优先级，直接最大
     }
     else
     {
@@ -923,21 +923,21 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
     }
 
     pxNewTCB->uxPriority = uxPriority;
-    #if ( configUSE_MUTEXES == 1 )
+    #if ( configUSE_MUTEXES == 1 )											//互斥量
     {
         pxNewTCB->uxBasePriority = uxPriority;
     }
     #endif /* configUSE_MUTEXES */
 
-    vListInitialiseItem( &( pxNewTCB->xStateListItem ) );
-    vListInitialiseItem( &( pxNewTCB->xEventListItem ) );
+    vListInitialiseItem( &( pxNewTCB->xStateListItem ) );					//状态列表插入
+    vListInitialiseItem( &( pxNewTCB->xEventListItem ) );					//事件列表插入
 
     /* Set the pxNewTCB as a link back from the ListItem_t.  This is so we can get
      * back to  the containing TCB from a generic item in a list. */
-    listSET_LIST_ITEM_OWNER( &( pxNewTCB->xStateListItem ), pxNewTCB );
+    listSET_LIST_ITEM_OWNER( &( pxNewTCB->xStateListItem ), pxNewTCB );			
 
     /* Event lists are always in priority order. */
-    listSET_LIST_ITEM_VALUE( &( pxNewTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+    listSET_LIST_ITEM_VALUE( &( pxNewTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. *///优先级事件？？？？？
     listSET_LIST_ITEM_OWNER( &( pxNewTCB->xEventListItem ), pxNewTCB );
 
     #if ( portUSING_MPU_WRAPPERS == 1 )
@@ -1027,9 +1027,9 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
 {
     /* Ensure interrupts don't access the task lists while the lists are being
      * updated. */
-    taskENTER_CRITICAL();
+    taskENTER_CRITICAL();						//临界
     {
-        uxCurrentNumberOfTasks++;
+        uxCurrentNumberOfTasks++;				//任务数量加	
 
         if( pxCurrentTCB == NULL )
         {
@@ -1042,7 +1042,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
                 /* This is the first task to be created so do the preliminary
                  * initialisation required.  We will not recover if this call
                  * fails, but we will report the failure. */
-                prvInitialiseTaskLists();
+                prvInitialiseTaskLists();												//初始化列表
             }
             else
             {
@@ -1058,7 +1058,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
             {
                 if( pxCurrentTCB->uxPriority <= pxNewTCB->uxPriority )
                 {
-                    pxCurrentTCB = pxNewTCB;
+                    pxCurrentTCB = pxNewTCB;								//优先级导致任务切换
                 }
                 else
                 {
@@ -1117,7 +1117,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
         {
             /* If null is passed in here then it is the calling task that is
              * being deleted. */
-            pxTCB = prvGetTCBFromHandle( xTaskToDelete );
+            pxTCB = prvGetTCBFromHandle( xTaskToDelete );				//判断删除是自身还是其他
 
             /* Remove task from the ready/delayed list. */
             if( uxListRemove( &( pxTCB->xStateListItem ) ) == ( UBaseType_t ) 0 )
@@ -1132,7 +1132,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
             /* Is the task waiting on an event also? */
             if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) ) != NULL )
             {
-                ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
+                ( void ) uxListRemove( &( pxTCB->xEventListItem ) );				//移除列表
             }
             else
             {
@@ -1145,7 +1145,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
              * not return. */
             uxTaskNumber++;
 
-            if( pxTCB == pxCurrentTCB )
+            if( pxTCB == pxCurrentTCB )						//当前任务
             {
                 /* A task is deleting itself.  This cannot complete within the
                  * task itself, as a context switch to another task is required.
@@ -1173,7 +1173,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
             else
             {
                 --uxCurrentNumberOfTasks;
-                traceTASK_DELETE( pxTCB );
+                traceTASK_DELETE( pxTCB );								//直接删除
 
                 /* Reset the next expected unblock time in case it referred to
                  * the task that has just been deleted. */
@@ -1985,7 +1985,7 @@ void vTaskStartScheduler( void )
     #else /* if ( configSUPPORT_STATIC_ALLOCATION == 1 ) */
     {
         /* The Idle task is being created using dynamically allocated RAM. */
-        xReturn = xTaskCreate( prvIdleTask,
+        xReturn = xTaskCreate( prvIdleTask,						//空闲任务
                                configIDLE_TASK_NAME,
                                configMINIMAL_STACK_SIZE,
                                ( void * ) NULL,
@@ -3441,7 +3441,7 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
     {
         /* See if any tasks have deleted themselves - if so then the idle task
          * is responsible for freeing the deleted task's TCB and stack. */
-        prvCheckTasksWaitingTermination();
+        prvCheckTasksWaitingTermination();					//释放删除任务的内存
 
         #if ( configUSE_PREEMPTION == 0 )
         {
@@ -3696,12 +3696,12 @@ static void prvCheckTasksWaitingTermination( void )
 
         /* uxDeletedTasksWaitingCleanUp is used to prevent taskENTER_CRITICAL()
          * being called too often in the idle task. */
-        while( uxDeletedTasksWaitingCleanUp > ( UBaseType_t ) 0U )
+        while( uxDeletedTasksWaitingCleanUp > ( UBaseType_t ) 0U )				//存在删除任务
         {
             taskENTER_CRITICAL();
             {
                 pxTCB = listGET_OWNER_OF_HEAD_ENTRY( ( &xTasksWaitingTermination ) ); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
-                ( void ) uxListRemove( &( pxTCB->xStateListItem ) );
+                ( void ) uxListRemove( &( pxTCB->xStateListItem ) );				//移除列表
                 --uxCurrentNumberOfTasks;
                 --uxDeletedTasksWaitingCleanUp;
             }

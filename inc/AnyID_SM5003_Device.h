@@ -112,7 +112,48 @@ void Device_SetPumpCtrlBit(DEVICE_OUTCTRL *pUsrCtrl, DEVICE_OUTCTRL *pOutCtrl);
 u8 Device_CheckTempr(u8 alarmTempr);
 
 void Device_SetFireCtrlBits(u32 ctrlBits, DEVICE_OUTCTRL *pUsrCtrl, DEVICE_OUTCTRL *pOutCtrl);
-
-
 void Device_PeriphTest();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------
+
+extern const PORT_INF DEVICE_RUNLED_COM;
+#define Device_RunLedOff()             (DEVICE_RUNLED_COM.Port->BSRR = DEVICE_RUNLED_COM.Pin)          //high
+#define Device_RunLedOn()              (DEVICE_RUNLED_COM.Port->BRR = DEVICE_RUNLED_COM.Pin)           //low
+
+extern const PORT_INF DEVICE_ALARMLED_COM;
+#define Device_AlarmLedOff()             (DEVICE_ALARMLED_COM.Port->BSRR = DEVICE_ALARMLED_COM.Pin)        //high
+#define Device_AlarmLedOn()              (DEVICE_ALARMLED_COM.Port->BRR = DEVICE_ALARMLED_COM.Pin)         //low
+
+
+extern const PORT_INF DEVICE_RUNLED1_COM;
+#define Device_RunLed1Off()             (DEVICE_RUNLED1_COM.Port->BSRR = DEVICE_RUNLED1_COM.Pin)        //high
+#define Device_RunLed1On()              (DEVICE_RUNLED1_COM.Port->BRR = DEVICE_RUNLED1_COM.Pin)         //low
+extern const PORT_INF DEVICE_RUNLED2_COM;
+#define Device_RunLed2Off()             (DEVICE_RUNLED2_COM.Port->BSRR = DEVICE_RUNLED2_COM.Pin)        //high
+#define Device_RunLed2On()              (DEVICE_RUNLED2_COM.Port->BRR = DEVICE_RUNLED2_COM.Pin)         //low
+
+void Device_CtrlIOInit(void);
+
+#define DEVICE_TASK_LED                 "DeviceTaskLed"
+void Device_LedTask();
+
+
+
+//demo
+void Device_TaskCreat();
+//
 #endif

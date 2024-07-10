@@ -100,7 +100,6 @@ void Device_AD_GetTempr(void)
         Win_CalAvg(&g_aDeviceTemprInfo[i], AD_GetTemperValue(i));
         AD_GetTmpr(&g_aDeviceTemprInfo[i]);
     }
-
 }
 
 
@@ -271,7 +270,7 @@ void Device_PeriphHandle()
 	}
 	else if(g_sDeviceStatInfo.authrity == DEVICE_AUTHRITY_WATER)
 	{   //喷淋权限
-		if(g_sWaterIngo.state & WATER_PERIPH_PROTECT_TOUCH)		
+        if(g_sWaterIngo.state & WATER_PERIPH_PROTECT_TOUCH)		
         {
            if(!a_CheckStateBit(g_sDeviceStatInfo.op, DEVICE_OP_PREPARING)
               && !a_CheckStateBit(g_sDeviceStatInfo.op, DEVICE_OP_OUTFIRE))
@@ -346,3 +345,213 @@ void Device_PeriphTest()
 	Water_PumpClose();
 	
 }
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------RTTASK
+const PORT_INF DEVICE_RUNLED_COM = {GPIOB, GPIO_Pin_11};
+const PORT_INF DEVICE_RUNLED1_COM = {GPIOB, GPIO_Pin_5};
+const PORT_INF DEVICE_RUNLED2_COM = {GPIOB, GPIO_Pin_9};
+const PORT_INF DEVICE_ALARMLED_COM = {GPIOB, GPIO_Pin_12};
+
+#define DEVICE_IO_CTRMODE_PWM                   1
+void Device_CtrlIOInit(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+    
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+
+#if DEVICE_IO_CTRMODE_PWM
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    //定义TIMx定时器结构体
+    TIM_OCInitTypeDef TIM_OCInitStructure;            //定义定时器脉宽调制结构体
+
+    GPIO_PinRemapConfig(GPIO_PartialRemap2_TIM2, ENABLE);    
+
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;         
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;       
+    GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure);    
+
+    TIM_TimeBaseStructure.TIM_Period = 100 - 1;             
+    TIM_TimeBaseStructure.TIM_Prescaler = 7200 - 1;         
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;            
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);                
+     
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;               //选择定时器模式:TIM脉冲宽度调制模式1
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;   //使能比较输出
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;       //输出极性:TIM输出比较极性高
+    TIM_OC4Init(TIM2, &TIM_OCInitStructure);                         //根据T指定的参数初始化外设TIM3 OC2
+    TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);                //使能TIM3在CCR2上的预装载寄存器
+    
+    TIM_Cmd(TIM2, ENABLE);  
+    
+    
+    //----
+   /* 
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    
+    TIM_OCInitTypeDef TIM_OCInitStructure;           
+
+    GPIO_PinRemapConfig(GPIO_PartialRemap_TIM3, ENABLE);    
+
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED1_COM.Pin;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;        
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;      
+    GPIO_Init(DEVICE_RUNLED1_COM.Port, &GPIO_InitStructure);      
+
+    TIM_TimeBaseStructure.TIM_Period = 100 - 1;            
+    TIM_TimeBaseStructure.TIM_Prescaler = 7200 - 1;         
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;           
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
+    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);                  
+     
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;               
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;   
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;      
+    TIM_OC2Init(TIM3, &TIM_OCInitStructure);                         
+    TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);              
+    
+    TIM_Cmd(TIM3, ENABLE);   
+
+    
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED2_COM.Pin;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;        
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;      
+    GPIO_Init(DEVICE_RUNLED2_COM.Port, &GPIO_InitStructure);      
+
+    TIM_TimeBaseStructure.TIM_Period = 100 - 1;            
+    TIM_TimeBaseStructure.TIM_Prescaler = 7200 - 1;         
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;           
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
+    TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);                  
+     
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;               
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;   
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;      
+    TIM_OC4Init(TIM4, &TIM_OCInitStructure);                         
+    TIM_OC4PreloadConfig(TIM4, TIM_OCPreload_Enable);              
+    TIM_ARRPreloadConfig(TIM4, ENABLE);  
+    TIM_Cmd(TIM4, ENABLE);   */
+#else
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;
+    GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure); 
+    
+    GPIO_InitStructure.GPIO_Pin = DEVICE_ALARMLED_COM.Pin;
+    GPIO_Init(DEVICE_ALARMLED_COM.Port, &GPIO_InitStructure);
+#endif
+}
+
+#define Device_SetPwm(v)        do{TIM2->CCR4 = v;}while(0)
+
+#define Device_SetLed1Pwm(v)        do{TIM3->CCR2 = v;}while(0)
+#define Device_SetLed2Pwm(v)        do{TIM4->CCR4 = v;}while(0)
+#define Device_SetLed3Pwm(v)        do{t->CCR4 = v;}while(0)
+void Device_LedTask()
+{   
+    const TickType_t delayTime = pdMS_TO_TICKS( 10UL );
+    static u8 pwmTime = 0, pwmLed2Time = 100,pwmState = 0;
+    TickType_t currentTime;
+        
+    currentTime = xTaskGetTickCount();
+    for( ; ; )
+    {
+        #if DEVICE_IO_CTRMODE_PWM
+                if(pwmState & 0x01)
+                {
+                    Device_SetPwm((pwmTime -= 1));
+                    //Device_SetLed1Pwm((pwmTime -= 1));
+                    //Device_SetLed2Pwm((pwmLed2Time += 1));
+                    if(pwmTime <= 0)
+                    {
+                        pwmState = 0x00;
+                        vTaskDelayUntil(&currentTime, pdMS_TO_TICKS( 5UL ));
+                    }
+                }
+                else
+                {
+                    Device_SetPwm((pwmTime += 1));
+                    //Device_SetLed1Pwm((pwmTime += 1));
+                    //Device_SetLed2Pwm((pwmLed2Time -= 1));
+                    if(pwmTime >= 100)
+                    {
+                        pwmState = 0x01;
+                        vTaskDelayUntil(&currentTime, pdMS_TO_TICKS( 5UL ));
+                    }
+                }
+                vTaskDelayUntil(&currentTime, delayTime);
+        #else
+                Device_RunLedOn();
+                vTaskDelayUntil(&currentTime, delayTime);
+                Device_AlarmLedOn();
+                vTaskDelayUntil(&currentTime, delayTime);
+                Device_RunLedOff();
+                vTaskDelayUntil(&currentTime, delayTime);
+                Device_AlarmLedOff();
+                vTaskDelayUntil(&currentTime, delayTime);
+        #endif
+    }
+}
+
+
+
+
+
+//demo
+
+
+void Device_Task1();
+void Device_Task2();
+void Device_Task3();
+
+
+TaskHandle_t Device_Task1Handle;
+TaskHandle_t Device_Task2Handle;
+TaskHandle_t Device_Task3Handle;
+
+void Device_TaskCreat()
+{
+	portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
+	xTaskCreate(Device_Task1, "Device_Task1", configMINIMAL_STACK_SIZE, NULL, 2, &Device_Task1Handle);		//Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate(Device_Task2, "Device_Task2", configMINIMAL_STACK_SIZE, NULL, 3, &Device_Task2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate(Device_Task3, "Device_Task3", configMINIMAL_STACK_SIZE, NULL, 4, &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+	
+	vTaskDelete(NULL);
+	portEXIT_CRITICAL();				//退出临界区
+}
+
+void Device_Task1()
+{
+	while(1)
+	{
+		Device_RunLedOn();
+		vTaskDelay(500);
+	}
+}
+
+void Device_Task2()
+{
+	while(1)
+	{
+		Device_RunLedOff();
+		vTaskDelay(500);
+	}
+}
+
+void Device_Task3()
+{
+	while(1)
+	{
+		Device_RunLedOn();
+		vTaskDelay(500);
+	}
+}
+
+
+
+//--

@@ -69,4 +69,9 @@ void Sys_CheckSensorTask(void);
 void Sys_RecordTask(void);
 void Sys_OutCtrlTask(void);
 
+
+
+
+//--------------
+void Sys_TaskScheduler();
 #endif

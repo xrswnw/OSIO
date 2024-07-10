@@ -136,8 +136,8 @@
     }
 
     #define portENABLE_INTERRUPTS()                   __set_BASEPRI( 0 )
-    #define portENTER_CRITICAL()                      vPortEnterCritical()
-    #define portEXIT_CRITICAL()                       vPortExitCritical()
+    #define portENTER_CRITICAL()                      vPortEnterCritical()				//进入临界区、关闭调度器
+    #define portEXIT_CRITICAL()                       vPortExitCritical()				//推出临界区
     #define portSET_INTERRUPT_MASK_FROM_ISR()         __get_BASEPRI(); portDISABLE_INTERRUPTS()
     #define portCLEAR_INTERRUPT_MASK_FROM_ISR( x )    __set_BASEPRI( x )
 /*-----------------------------------------------------------*/
