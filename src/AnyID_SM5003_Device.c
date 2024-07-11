@@ -368,14 +368,14 @@ void Device_CtrlIOInit(void)
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    //定义TIMx定时器结构体
     TIM_OCInitTypeDef TIM_OCInitStructure;            //定义定时器脉宽调制结构体
 
-    GPIO_PinRemapConfig(GPIO_PartialRemap2_TIM2, ENABLE);    
+    //GPIO_PinRemapConfig(GPIO_PartialRemap2_TIM2, ENABLE);    
 
     GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;         
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//GPIO_Mode_AF_PP;         
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;       
     GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure);    
 
-    TIM_TimeBaseStructure.TIM_Period = 100 - 1;             
+      /* TIM_TimeBaseStructure.TIM_Period = 100 - 1;             
     TIM_TimeBaseStructure.TIM_Prescaler = 7200 - 1;         
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;            
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
@@ -389,7 +389,7 @@ void Device_CtrlIOInit(void)
     
     TIM_Cmd(TIM2, ENABLE);  
     
-    
+    */
     //----
    /* 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    
@@ -509,27 +509,77 @@ void Device_Task1();
 void Device_Task2();
 void Device_Task3();
 
-
+#if configSUPPORT_DYNAMIC_ALLOCATION
 TaskHandle_t Device_Task1Handle;
 TaskHandle_t Device_Task2Handle;
 TaskHandle_t Device_Task3Handle;
 
+
+#if configSUPPORT_STATIC_ALLOCATION
+StackType_t Device_StaicTask1[configMINIMAL_STACK_SIZE];
+StackType_t Device_StaicTask2[configMINIMAL_STACK_SIZE];
+StackType_t Device_StaicTask3[configMINIMAL_STACK_SIZE];
+#endif
+
+StaticTask_t Device_TcbTask1;
+StaticTask_t Device_TcbTask2;
+StaticTask_t Device_TcbTask3;
+#endif
+
+
 void Device_TaskCreat()
 {
-	portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
-	xTaskCreate(Device_Task1, "Device_Task1", configMINIMAL_STACK_SIZE, NULL, 2, &Device_Task1Handle);		//Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
-	xTaskCreate(Device_Task2, "Device_Task2", configMINIMAL_STACK_SIZE, NULL, 3, &Device_Task2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
-	xTaskCreate(Device_Task3, "Device_Task3", configMINIMAL_STACK_SIZE, NULL, 4, &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
 	
+#if configSUPPORT_DYNAMIC_ALLOCATION
+	//xTaskCreate(Device_Task1, "Device_Task1", configMINIMAL_STACK_SIZE, NULL, 2, &Device_Task1Handle);		//Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	//xTaskCreate(Device_Task2, "Device_Task2", configMINIMAL_STACK_SIZE, NULL, 3, &Device_Task2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	//xTaskCreate(Device_Task3, "Device_Task3", configMINIMAL_STACK_SIZE, NULL, 4, &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+#endif	
+	
+#if configSUPPORT_STATIC_ALLOCATION
+	Device_Task1Handle = xTaskCreateStatic((TaskFunction_t) Device_Task1,				//函数地址
+						  (const char * const) "Device_Task1",							//函数名
+						  (const uint32_t) configMINIMAL_STACK_SIZE,					//堆栈大小
+						  (void * const) NULL,											//携带参数
+						  (UBaseType_t) 2,												//优先级
+						  (StackType_t * const) Device_StaicTask1,						//堆栈地址
+						  (StaticTask_t * const) &Device_TcbTask1);						//数据块地址
+	Device_Task2Handle = xTaskCreateStatic((TaskFunction_t) Device_Task2,
+						  (const char * const) "Device_Task2",
+						  (const uint32_t) configMINIMAL_STACK_SIZE,
+						  (void * const) NULL,
+						  (UBaseType_t) 3,
+						  (StackType_t * const) Device_StaicTask2,
+						  (StaticTask_t * const) &Device_TcbTask2);
+	Device_Task3Handle = xTaskCreateStatic((TaskFunction_t) Device_Task3,
+						  (const char * const) "Device_Task3",
+						  (const uint32_t) configMINIMAL_STACK_SIZE,
+						  (void * const) NULL,
+						  (UBaseType_t) 4,
+						  (StackType_t * const) Device_StaicTask3,
+						  (StaticTask_t * const) &Device_TcbTask3);
+#endif
 	vTaskDelete(NULL);
-	portEXIT_CRITICAL();				//退出临界区
+	//portEXIT_CRITICAL();				//退出临界区
 }
 
 void Device_Task1()
 {
+  	u8 state = 0;
 	while(1)
 	{
-		Device_RunLedOn();
+	  	if(state == 0)
+		{
+		  	state = 1;
+			Device_RunLedOn();
+		}
+		else
+		{
+			state = 0;
+			Device_RunLedOff();
+		}
+		
 		vTaskDelay(500);
 	}
 }
@@ -538,20 +588,54 @@ void Device_Task2()
 {
 	while(1)
 	{
-		Device_RunLedOff();
+		//Device_RunLedOff();
 		vTaskDelay(500);
 	}
 }
 
 void Device_Task3()
 {
+  	u8 keyValue = 0;
 	while(1)
 	{
-		Device_RunLedOn();
+		if(keyValue == 1)
+		{
+			vTaskSuspend(Device_Task1Handle);	
+		}
+		else if(keyValue == 2)
+		{
+			vTaskResume(Device_Task1Handle);	
+		}
+		  
 		vTaskDelay(500);
 	}
 }
+//建立IO中断，在中断中解除挂起xTaskResumeFromISR
 
 
+//空闲任务内存分配
 
+#if configSUPPORT_STATIC_ALLOCATION
+StaticTask_t Device_TcbIdleTask; 
+StackType_t Device_StackIdleTask[configMINIMAL_STACK_SIZE];
+void vApplicationGetIdleTaskMemory(StaticTask_t ** ppxIdleTaskTCBBuffer,
+								   StackType_t ** ppxIdleTaskStackBuffer,
+								   uint32_t * pulIdleTaskStackSize )
+{
+	*ppxIdleTaskTCBBuffer = &Device_TcbIdleTask; 					//	空闲任务数据块
+	*ppxIdleTaskStackBuffer = Device_StackIdleTask;					//空闲任务堆栈地址
+	* pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;				//空闲任务堆栈大小
+}
+
+StaticTask_t Device_TcbTimeTask; 
+StackType_t Device_StackTimeTask[configMINIMAL_STACK_SIZE];
+void vApplicationGetTimerTaskMemory(StaticTask_t ** ppxTimerTaskTCBBuffer,
+								    StackType_t ** ppxTimerTaskStackBuffer,
+								    uint32_t * pulTimerTaskStackSize)
+{
+	*ppxTimerTaskTCBBuffer = &Device_TcbTimeTask;
+	*ppxTimerTaskStackBuffer = Device_StackTimeTask;
+	*pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
+}
+#endif
 //--

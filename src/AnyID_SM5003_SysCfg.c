@@ -181,7 +181,7 @@ void Sys_Init(void)
     Sys_CfgClock();
     Sys_CfgNVIC();
     Sys_CfgPeriphClk(ENABLE);
-    
+    NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );			//将所有优先级位都指定为抢占优先级位， 不保留任何优先级位作为子优先级位
 #if SYS_ENABLE_WDT
     WDG_InitIWDG();
 #endif

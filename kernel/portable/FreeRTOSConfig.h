@@ -57,18 +57,17 @@ errata. */
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION	1                                   //优先级调度算法。1:硬件算法调度，速率快，最大支持优先级31；0:软件算法调度，优先级不限，速率相对慢
 #define configUSE_TIME_SLICING					1									//同优先级轮流执行
 #define configIDLE_SHOULD_YIELD					1									//空闲任务是否让步(每执行一次空闲任务，查看一次是否有高优先级任务)
-#define configSUPPORT_STATIC_ALLOCATION			0								   //是否需要使用静态队列
 
 
 #define configSUPPORT_DYNAMIC_ALLOCATION		1									//使用动态任务创建方式（堆栈由系统分配）
-#define configSUPPORT_STATIC_ALLOCATION			0									//不使用静态任务创建方式（堆栈自身分配）、使能空闲任务需存在
+#define configSUPPORT_STATIC_ALLOCATION			1									//不使用静态任务创建方式（堆栈自身分配）、使能空闲任务、定时器(可选)需存在
 
 #define configUSE_IDLE_HOOK						0									//空闲任务狗子
 #define configUSE_TICK_HOOK						0                                   //滴答定时器狗子
 #define configCPU_CLOCK_HZ						( SystemCoreClock )					//对应MCU主频
 #define configTICK_RATE_HZ						( ( TickType_t ) 1000 )				//系统运行时基，可相应修改，调整运行速度（时间片）
 #define configMAX_PRIORITIES					( 31 )                              //32位优先级
-#define configMINIMAL_STACK_SIZE				( ( unsigned short ) 256 )			//空闲任务堆栈大小
+#define configMINIMAL_STACK_SIZE				( ( unsigned short ) 128 )			//空闲任务堆栈大小
 #define configTOTAL_HEAP_SIZE					( ( size_t ) ( 10 * 1024 ) )		//堆空间
 #define configMAX_TASK_NAME_LEN					( 20 )								//任务描述名长度
 #define configUSE_TRACE_FACILITY				1                                   //可视化函数跟踪
@@ -88,7 +87,7 @@ errata. */
 
 
 /* Software timer definitions. */
-#define configUSE_TIMERS				1
+#define configUSE_TIMERS				1											//静态任务创建需要定时器任务
 #define configTIMER_TASK_PRIORITY		( 2 )
 #define configTIMER_QUEUE_LENGTH		5
 #define configTIMER_TASK_STACK_DEPTH	( configMINIMAL_STACK_SIZE * 2 )
@@ -101,6 +100,7 @@ to exclude the API function. */
 #define INCLUDE_uxTaskGetStackHighWaterMark		1									//允许获取任务堆栈历史剩余最小值
 #define INCLUDE_vTaskCleanUpResources	1
 #define INCLUDE_vTaskSuspend			1											//允许挂起
+#define INCLUDE_xTaskResumeFromISR		1											//允许中断中调用挂起解卦
 #define INCLUDE_vTaskDelayUntil			1											//允许任务绝对时间堵塞
 #define INCLUDE_vTaskDelay				1											//允许任务堵塞
 
@@ -114,13 +114,13 @@ to exclude the API function. */
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"
 function. */
-#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY			0x3f
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY			15					//freertos管理的最低中断优先级						及中断服务函数抢占优先级须在最高和最低之间
 
 /* The highest interrupt priority that can be used by any interrupt service
 routine that makes calls to interrupt safe FreeRTOS API functions.  DO NOT CALL
 INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
 PRIORITY THAN THIS! (higher priorities are lower numeric values. */
-#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY	5
+#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY	5					//freertos管理的最高中断优先级
 
 /* Interrupt priorities used by the kernel port layer itself.  These are generic
 to all Cortex-M ports, and do not rely on any particular library functions. */
