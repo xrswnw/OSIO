@@ -3,7 +3,7 @@
 
 #include "AnyID_Type.h"
 #include "AnyID_Stdlib.h"
-
+#include <stdio.h>
 //设定工作时钟
 #define SYS_CLOCK_FREQ              72000000
 

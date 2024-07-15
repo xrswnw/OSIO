@@ -353,29 +353,70 @@ void Device_PeriphTest()
 
 //---------------------------------------------------------------------------------------------------------------------------------RTTASK
 const PORT_INF DEVICE_RUNLED_COM = {GPIOB, GPIO_Pin_11};
+const PORT_INF DEVICE_ALARMLED_COM = {GPIOB, GPIO_Pin_12};
 const PORT_INF DEVICE_RUNLED1_COM = {GPIOB, GPIO_Pin_5};
 const PORT_INF DEVICE_RUNLED2_COM = {GPIOB, GPIO_Pin_9};
-const PORT_INF DEVICE_ALARMLED_COM = {GPIOB, GPIO_Pin_12};
 
-#define DEVICE_IO_CTRMODE_PWM                   1
+
+
+const PORT_INF DEVICE_KEY_COM = {GPIOA, GPIO_Pin_6};
+
+#define DEVICE_IO_CTRMODE_PWM                   0
+#define DEVICE_IO_EXTI_ENABLE                   1
 void Device_CtrlIOInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-
-#if DEVICE_IO_CTRMODE_PWM
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    //定义TIMx定时器结构体
-    TIM_OCInitTypeDef TIM_OCInitStructure;            //定义定时器脉宽调制结构体
-
-    //GPIO_PinRemapConfig(GPIO_PartialRemap2_TIM2, ENABLE);    
-
-    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;         
+             
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//GPIO_Mode_AF_PP;         
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;       
-    GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure);    
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;       
+    GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure);  
+    
+    GPIO_InitStructure.GPIO_Pin = DEVICE_ALARMLED_COM.Pin;       
+    GPIO_Init(DEVICE_ALARMLED_COM.Port, &GPIO_InitStructure);
 
-      /* TIM_TimeBaseStructure.TIM_Period = 100 - 1;             
+    
+#if DEVICE_IO_EXTI_ENABLE
+    GPIO_InitStructure.GPIO_Pin = DEVICE_KEY_COM.Pin;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//GPIO_Mode_AF_PP;         
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;       
+    GPIO_Init(DEVICE_KEY_COM.Port, &GPIO_InitStructure);  
+    
+    
+    GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource6);
+    EXTI_InitTypeDef Exti_InitStructure;
+    
+    Exti_InitStructure.EXTI_Line = EXTI_Line6;
+    Exti_InitStructure.EXTI_LineCmd = ENABLE;
+    Exti_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    Exti_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+    
+    EXTI_Init(&Exti_InitStructure);
+    
+    //NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 10;               //注意优先级管理
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&NVIC_InitStructure);
+    
+#endif
+    
+#if DEVICE_IO_CTRMODE_PWM
+
+    /* 
+    GPIO_InitStructure.GPIO_Pin = DEVICE_RUNLED_COM.Pin;         
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;         
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;       
+    GPIO_Init(DEVICE_RUNLED_COM.Port, &GPIO_InitStructure);  
+
+
+    TIM_TimeBaseStructure.TIM_Period = 100 - 1;             
     TIM_TimeBaseStructure.TIM_Prescaler = 7200 - 1;         
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;            
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
@@ -388,10 +429,13 @@ void Device_CtrlIOInit(void)
     TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);                //使能TIM3在CCR2上的预装载寄存器
     
     TIM_Cmd(TIM2, ENABLE);  
-    
     */
     //----
-   /* 
+   /*     
+
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    //定义TIMx定时器结构体
+    TIM_OCInitTypeDef TIM_OCInitStructure;            //定义定时器脉宽调制结构体
+
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;    
     TIM_OCInitTypeDef TIM_OCInitStructure;           
 
@@ -453,7 +497,8 @@ void Device_CtrlIOInit(void)
 #define Device_SetLed2Pwm(v)        do{TIM4->CCR4 = v;}while(0)
 #define Device_SetLed3Pwm(v)        do{t->CCR4 = v;}while(0)
 void Device_LedTask()
-{   
+{  
+#if DEVICE_IO_CTRMODE_PWM
     const TickType_t delayTime = pdMS_TO_TICKS( 10UL );
     static u8 pwmTime = 0, pwmLed2Time = 100,pwmState = 0;
     TickType_t currentTime;
@@ -496,12 +541,33 @@ void Device_LedTask()
                 vTaskDelayUntil(&currentTime, delayTime);
         #endif
     }
+#endif
 }
 
 
+/*
+size_t __write(int handle, const unsigned char *buf, size_t bufSize) {
+		int sendsize;
 
+    sendsize = uartSend((uint8_t *)buf,bufSize);
 
+    return sendsize ;
+}
+*/
+int fputc(int ch, FILE *f)                  //重定向，使用printf，需添加宏
+{
+    
+    R485_WriteBuffer((u8 *)&ch, 1);
+    
+    return ch;
+}
 
+void Device_Peintf(u8 *pBuffer)
+{
+    portENTER_CRITICAL();                                   //进入临界区、等待数据发送完成，否则高优先级可能会抢占
+    printf((char const *)pBuffer);
+    portEXIT_CRITICAL();                                    //在同串口情况下抢占导致乱码
+}
 //demo
 
 
@@ -527,14 +593,29 @@ StaticTask_t Device_TcbTask3;
 #endif
 
 
-void Device_TaskCreat()
+void Device_TaskCreat() 
 {
 	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
-	
+
 #if configSUPPORT_DYNAMIC_ALLOCATION
-	//xTaskCreate(Device_Task1, "Device_Task1", configMINIMAL_STACK_SIZE, NULL, 2, &Device_Task1Handle);		//Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
-	//xTaskCreate(Device_Task2, "Device_Task2", configMINIMAL_STACK_SIZE, NULL, 3, &Device_Task2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
-	//xTaskCreate(Device_Task3, "Device_Task3", configMINIMAL_STACK_SIZE, NULL, 4, &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
+                (const char * const) "Device_Task1",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 2,                                                //优先级
+                (TaskHandle_t *) &Device_Task1Handle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_Task2, 
+                (const char * const) "Device_Task2", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_Task2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_Task3, 
+                (const char * const) "Device_Task3", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
 #endif	
 	
 #if configSUPPORT_STATIC_ALLOCATION
@@ -567,6 +648,8 @@ void Device_TaskCreat()
 void Device_Task1()
 {
   	u8 state = 0;
+    TickType_t currentTime = 0;
+    const TickType_t delayTime = pdMS_TO_TICKS( 500UL );
 	while(1)
 	{
 	  	if(state == 0)
@@ -579,40 +662,74 @@ void Device_Task1()
 			state = 0;
 			Device_RunLedOff();
 		}
-		
-		vTaskDelay(500);
+       
+        Device_Peintf("Task1 Runing\r\n"); 
+        //vTaskSuspend(Device_Task2Handle);
+        vTaskDelay(delayTime);
+		vTaskDelayUntil(&currentTime, delayTime);
 	}
 }
 
 void Device_Task2()
 {
+    u8 state = 0;
+    TickType_t currentTime = 0;
+    const TickType_t delayTime = pdMS_TO_TICKS( 800UL );
 	while(1)
 	{
-		//Device_RunLedOff();
-		vTaskDelay(500);
+	  	if(state == 0)
+		{
+		  	state = 1;
+			Device_AlarmLedOn();
+		}
+		else
+		{
+			state = 0;
+			Device_AlarmLedOff();
+		}
+        
+        Device_Peintf("Task2 Runing\r\n"); 
+        //vTaskSuspend(Device_Task1Handle);
+        vTaskDelay(delayTime);
+		//vTaskDelayUntil(&currentTime, delayTime);
 	}
 }
-
+u8 g_nKeyValue = 0;
 void Device_Task3()
 {
-  	u8 keyValue = 0;
+    TickType_t currentTime = 0;
+    u8 state = 0;
+    const TickType_t delayTime = pdMS_TO_TICKS( 1000UL );
 	while(1)
 	{
-		if(keyValue == 1)
+		if(g_nKeyValue == 1)
 		{
-			vTaskSuspend(Device_Task1Handle);	
+            if(state == 0)
+            {
+                state = 1;
+                vTaskSuspend(Device_Task2Handle);       //获取任务状态，不能一直挂起
+                Device_Peintf("ISR OP, Suspend Task2\r\n");
+            }
 		}
-		else if(keyValue == 2)
+		else if(g_nKeyValue == 2)
 		{
 			vTaskResume(Device_Task1Handle);	
 		}
-		  
-		vTaskDelay(500);
+        else
+        {
+            if(state == 1)
+            {
+                state = 0;
+            }
+        }
+        Device_Peintf("Task3 Runing\r\n"); 
+        vTaskDelay(delayTime);
+        //vTaskDelayUntil(&currentTime, delayTime);
 	}
 }
 //建立IO中断，在中断中解除挂起xTaskResumeFromISR
 
-
+//putchar
 //空闲任务内存分配
 
 #if configSUPPORT_STATIC_ALLOCATION

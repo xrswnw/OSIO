@@ -618,7 +618,9 @@ __weak void vPortSetupTimerInterrupt( void )
         {
             /* Look up the interrupt's priority. */
             ucCurrentPriority = pcInterruptPriorityRegisters[ ulCurrentInterrupt ];
-
+            /*portFIRST_USER_INTERRUPT_NUMBER 是一个和芯片相关的用户中断号
+            在M3、M4的芯片上就是15以后是外部中断的中断号所以这里配置成16
+            判断是不是在外部中断中调用的API函数，如果是执行if里的内容*/
             /* The following assertion will fail if a service routine (ISR) for
              * an interrupt that has been assigned a priority above
              * configMAX_SYSCALL_INTERRUPT_PRIORITY calls an ISR safe FreeRTOS API
@@ -642,6 +644,9 @@ __weak void vPortSetupTimerInterrupt( void )
              * The following links provide detailed information:
              * https://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html									//库函数和freer同时调用问题
              * https://www.FreeRTOS.org/FAQHelp.html */
+            /*如果当前执行的中断优先级数字小于配置ucMaxSysCallPriority这个值实际上是
+            configMAX_SYSCALL_INTERRUPT_PRIORITY，也就是当前中断优先级高于配置最高优先级
+            断言将会失败，程序将停止在这里*/
             configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
         }
 
@@ -658,6 +663,7 @@ __weak void vPortSetupTimerInterrupt( void )
          * scheduler.  Note however that some vendor specific peripheral libraries
          * assume a non-zero priority group setting, in which cases using a value
          * of zero will result in unpredictable behaviour. */
+        /*当前中断优先级分组组大于配置分组（也就是表示抢占优先级的位数少于配置）则断言失败，程序停止*/
         configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
     }
 

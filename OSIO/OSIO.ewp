@@ -226,6 +226,7 @@
                     <state>_ANYID_HSE12P00_</state>
                     <state>_ANYID_SM5003_</state>
                     <state>USE_FREE_RTOS</state>
+                    <state>_DLIB_FILE_DESCRIPTOR</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

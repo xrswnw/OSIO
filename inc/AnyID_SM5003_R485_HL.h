@@ -1,3 +1,4 @@
+
 #ifndef _ANYID_SM5003_R485_HL_
 #define _ANYID_SM5003_R485_HL_
 
@@ -55,4 +56,5 @@ void R485_Delayms(u32 n);
 void R485_WriteByte(u8 ch);
 void R485_WriteBuffer(u8 *pBuffer, u32 len);
 
+void R485_WriteStr(char *pBuffer);
 #endif

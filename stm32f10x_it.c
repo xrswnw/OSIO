@@ -152,6 +152,31 @@ void SysTick_Handler(void)
 }
 */
 
+u16 g_nCountSensor_Count;
+void EXTI9_5_IRQHandler()
+{
+    BaseType_t xYieldRequired = pdFALSE;
+    if (EXTI_GetITStatus(EXTI_Line6) == SET)
+	{
+        if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_6) == 0)
+        {
+            g_nCountSensor_Count ++;
+            printf("ISR OP, Resume Task2\r\n");
+            xYieldRequired = xTaskResumeFromISR(Device_Task2Handle);
+            if(xYieldRequired == pdTRUE)
+            {
+                portYIELD_FROM_ISR( xYieldRequired );           //上下文切换，如果任务正在A在运行时进入中断，此时解除高优先级任务B，此时ISR结束后立即运行任务B，无需等待
+            }
+            g_nKeyValue = 0;
+        }
+        else
+        {
+            g_nKeyValue = 1;
+        }
+        EXTI_ClearITPendingBit(EXTI_Line6);
+    }
+}
+
 void R485_RxDMAIRQHandler(void)
 {
     R485_DisableRxDma(); //接收缓冲区满，一般不会出现这样的情况，如果有，就可能系统有故障

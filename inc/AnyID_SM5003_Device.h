@@ -146,6 +146,11 @@ extern const PORT_INF DEVICE_RUNLED2_COM;
 #define Device_RunLed2Off()             (DEVICE_RUNLED2_COM.Port->BSRR = DEVICE_RUNLED2_COM.Pin)        //high
 #define Device_RunLed2On()              (DEVICE_RUNLED2_COM.Port->BRR = DEVICE_RUNLED2_COM.Pin)         //low
 
+
+extern TaskHandle_t Device_Task1Handle;
+extern TaskHandle_t Device_Task2Handle;
+extern TaskHandle_t Device_Task3Handle;
+extern u8 g_nKeyValue;
 void Device_CtrlIOInit(void);
 
 #define DEVICE_TASK_LED                 "DeviceTaskLed"

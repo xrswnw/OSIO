@@ -60,7 +60,7 @@ errata. */
 
 
 #define configSUPPORT_DYNAMIC_ALLOCATION		1									//使用动态任务创建方式（堆栈由系统分配）
-#define configSUPPORT_STATIC_ALLOCATION			1									//不使用静态任务创建方式（堆栈自身分配）、使能空闲任务、定时器(可选)需存在
+#define configSUPPORT_STATIC_ALLOCATION			0									//不使用静态任务创建方式（堆栈自身分配）、使能空闲任务、定时器(可选)需存在
 
 #define configUSE_IDLE_HOOK						0									//空闲任务狗子
 #define configUSE_TICK_HOOK						0                                   //滴答定时器狗子
@@ -103,7 +103,7 @@ to exclude the API function. */
 #define INCLUDE_xTaskResumeFromISR		1											//允许中断中调用挂起解卦
 #define INCLUDE_vTaskDelayUntil			1											//允许任务绝对时间堵塞
 #define INCLUDE_vTaskDelay				1											//允许任务堵塞
-
+#define INCLUDE_xTaskAbortDelay         1                                           //允许任务强制离开阻塞态
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
 	/* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
@@ -131,15 +131,15 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
-#define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
+#define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS();for( ;; ); }
 
+//#define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); printf( "Assert failed! File: %s, Line: %d\n", __FILE__, __LINE__ ); for( ;; ); }
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names.  WORKAROUND_PMU_CM001 is defined at the top of this file. */
 #define vPortSVCHandler SVC_Handler
 #define xPortSysTickHandler SysTick_Handler
 #define xPortPendSVHandler PendSV_Handler
 
-/* Demo application specific settings. */
 
 
 #endif /* FREERTOS_CONFIG_H */

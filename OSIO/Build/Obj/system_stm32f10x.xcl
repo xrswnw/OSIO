@@ -1,20 +1,20 @@
-"E:\AnyId\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup\system_stm32f10x.c"
+"E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup\system_stm32f10x.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -MD
 -MF
-E:\AnyId\Git\SoftWare\OSIO\OSIO\Build\Obj\system_stm32f10x.pbi.dep
+E:\AnyID\Git\OSIO\OSIO\OSIO\Build\Obj\system_stm32f10x.pbi.dep
 -o
 system_stm32f10x.pbi
 -I
-E:\AnyId\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
+E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..
+E:\AnyID\Git\OSIO\OSIO\OSIO\..
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\inc
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\USB\inc
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\USB\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
 -I
@@ -22,13 +22,13 @@ E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\inc
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable\iar
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable\iar
 -I
-E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable\MemMang
+E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable\MemMang
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I
@@ -38,11 +38,11 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc\c
 -I
-E:\AnyId\Git\SoftWare\OSIO
+E:\AnyID\Git\OSIO\OSIO
 -I
-E:\AnyId\Git\SoftWare\OSIO\inc
+E:\AnyID\Git\OSIO\OSIO\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\USB\inc
+E:\AnyID\Git\OSIO\OSIO\USB\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
 -I
@@ -50,13 +50,13 @@ E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\kernel\inc
+E:\AnyID\Git\OSIO\OSIO\kernel\inc
 -I
-E:\AnyId\Git\SoftWare\OSIO\kernel\portable
+E:\AnyID\Git\OSIO\OSIO\kernel\portable
 -I
-E:\AnyId\Git\SoftWare\OSIO\kernel\portable\iar
+E:\AnyID\Git\OSIO\OSIO\kernel\portable\iar
 -I
-E:\AnyId\Git\SoftWare\OSIO\kernel\portable\MemMang
+E:\AnyID\Git\OSIO\OSIO\kernel\portable\MemMang
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I
@@ -341,6 +341,7 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include
 -D_ANYID_HSE12P00_=1
 -D_ANYID_SM5003_=1
 -DUSE_FREE_RTOS=1
+-D_DLIB_FILE_DESCRIPTOR=1
 -D_DLIB_CONFIG_FILE_HEADER_NAME="C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.3\\arm\\inc\\c\\DLib_Config_Full.h"
 -D_DLIB_CONFIG_FILE_STRING="C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.3\\arm\\inc\\c\\DLib_Config_Full.h"
 -D__VERSION__="IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM"

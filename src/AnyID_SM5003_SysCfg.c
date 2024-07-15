@@ -185,6 +185,7 @@ void Sys_Init(void)
 #if SYS_ENABLE_WDT
     WDG_InitIWDG();
 #endif
+    R485_Init();
 	Sys_Delayms(500);
     Sys_Delayms(500);
     Sys_Delayms(500);

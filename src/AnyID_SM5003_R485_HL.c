@@ -189,3 +189,17 @@ void R485_WriteBuffer(u8 *pBuffer, u32 len)
     R485_Delayms(1);
     R485_EnableRx();
 }
+
+void R485_WriteStr(char *pBuffer)
+{
+    u32 i = 0;
+    R485_EnableTx();
+    R485_Delayms(1);
+    for(i = 0; i < strlen(pBuffer); i++)
+    {
+        R485_WriteByte(pBuffer[i]);
+    }
+    R485_ChkTxOver();
+    R485_Delayms(1);
+    R485_EnableRx();
+}
