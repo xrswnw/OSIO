@@ -195,6 +195,8 @@ void Sys_Init(void)
     Device_CtrlIOInit();
     
     Sys_EnableInt();
+    
+    //vTaskSuspendAll();
 }
 
 

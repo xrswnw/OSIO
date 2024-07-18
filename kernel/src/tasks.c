@@ -2033,9 +2033,9 @@ void vTaskStartScheduler( void )
         }
         #endif
 
-        xNextTaskUnblockTime = portMAX_DELAY;
+        xNextTaskUnblockTime = portMAX_DELAY;					//堵塞事件，此时未任务运行
         xSchedulerRunning = pdTRUE;
-        xTickCount = ( TickType_t ) configINITIAL_TICK_COUNT;
+        xTickCount = ( TickType_t ) configINITIAL_TICK_COUNT;		//系统心跳，初始化0
 
         /* If configGENERATE_RUN_TIME_STATS is defined then the following
          * macro must be defined to configure the timer/counter used to generate
@@ -2043,9 +2043,9 @@ void vTaskStartScheduler( void )
          * is set to 0 and the following line fails to build then ensure you do not
          * have portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() defined in your
          * FreeRTOSConfig.h file. */
-        portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
+        portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();			//事件统计、需编写
 
-        traceTASK_SWITCHED_IN();
+        traceTASK_SWITCHED_IN();						//事调试、需编写
 
         /* Setting up the timer tick is hardware specific and thus in the
          * portable interface. */

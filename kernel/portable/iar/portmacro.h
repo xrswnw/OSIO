@@ -85,7 +85,7 @@
 /*-----------------------------------------------------------*/
 
 
-/* Scheduler utilities. */
+/* Scheduler utilities. */                  //任务切换
     #define portYIELD()                                 \
     {                                                   \
         /* Set a PendSV to request a context switch. */ \
@@ -95,7 +95,7 @@
     }
 
     #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
-    #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+    #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )                   //产生PENDSV中断，更新任务
     #define portEND_SWITCHING_ISR( xSwitchRequired )    do { if( xSwitchRequired != pdFALSE ) portYIELD(); } while( 0 )
     #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
 
@@ -127,7 +127,7 @@
 /* Critical section management. */
     extern void vPortEnterCritical( void );
     extern void vPortExitCritical( void );
-
+    //BASEPRI寄存器，掩码中断，低于此设定值的优先级中断全部屏蔽，以STM32为例，中断位数仅为高四位（16级中断），左移四位
     #define portDISABLE_INTERRUPTS()                           \
     {                                                          \
         __set_BASEPRI( configMAX_SYSCALL_INTERRUPT_PRIORITY ); \

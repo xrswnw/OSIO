@@ -58,7 +58,7 @@ void vListInitialise( List_t * const pxList )
 
     /* The list end value is the highest possible value in the list to
      * ensure it remains at the end of the list. */
-    pxList->xListEnd.xItemValue = portMAX_DELAY;
+    pxList->xListEnd.xItemValue = portMAX_DELAY;					//列表末尾、辅助值最大
 
     /* The list end next and previous pointers point to itself so we know
      * when the list is empty. */
@@ -74,7 +74,7 @@ void vListInitialise( List_t * const pxList )
     }
     #endif
 
-    pxList->uxNumberOfItems = ( UBaseType_t ) 0U;
+    pxList->uxNumberOfItems = ( UBaseType_t ) 0U;						//末尾列表项不计算
 
     /* Write known values into the list if
      * configUSE_LIST_DATA_INTEGRITY_CHECK_BYTES is set to 1. */

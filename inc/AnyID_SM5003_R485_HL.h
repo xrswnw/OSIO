@@ -5,7 +5,7 @@
 #include "AnyID_SM5003_Config.h"
 
 #define R485_PORT                           USART1
-#define R485_BAUDRARE                       115200
+#define R485_BAUDRARE                       2000000//115200
 #define R485_IRQHandler                     USART1_IRQHandler
 #define R485_ChkTxOver()                    while(((R485_PORT)->SR & USART_FLAG_TC) == (u16)RESET)
 

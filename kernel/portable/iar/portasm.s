@@ -77,11 +77,11 @@ vPortSVCHandler:
 	ldr r1, [r3]
 	ldr r0, [r1]
 	/* Pop the core registers. */
-	ldmia r0!, {r4-r11}
-	msr psp, r0
+	ldmia r0!, {r4-r11}				//出栈
+	msr psp, r0						//任务栈指针写入PSP（堆栈指针，中断使用）
 	isb
-	mov r0, #0
-	msr	basepri, r0
+	mov r0, #0						
+	msr	basepri, r0					//baseper写入0，开启所有中断
 	orr r14, r14, #13
 	bx r14
 
@@ -93,12 +93,12 @@ vPortStartFirstTask
 	ldr r0, [r0]
 	ldr r0, [r0]
 	/* Set the msp back to the start of the stack. */
-	msr msp, r0
+	msr msp, r0				//	恢复msp指针
 	/* Call SVC to start the first task, ensuring interrupts are enabled. */
 	cpsie i
 	cpsie f
 	dsb
 	isb
-	svc 0
+	svc 0				//svc中断
 
 	END

@@ -592,11 +592,118 @@ StaticTask_t Device_TcbTask2;
 StaticTask_t Device_TcbTask3;
 #endif
 
+List_t g_sList = {0};
+ListItem_t g_sListItem1 = {0};
+ListItem_t g_sListItem2 = {0};
+ListItem_t g_sListItem3 = {0};
+ListItem_t g_sListItem4 = {0};
+
+#define Device_PrintfListInfo(s,p)  do{printf(s);printf("Addr : 0x%p\r\n", &g_sList);}while(0)
+
+
+void Device_PrintfDemoInfo()
+{
+    printf("g_sList : 0x%p\r\n", &g_sList);
+    printf("g_sList.pxIndex : 0x%p\r\n", g_sList.pxIndex);
+    printf("g_sList.xListEnd : 0x%p\r\n", &g_sList.xListEnd);
+    printf("g_sList.uxNumberOfItems : %d\r\n", g_sList.uxNumberOfItems);
+    printf("\r\n");
+    
+    printf("g_sListItem1 : 0x%p\r\n", &g_sListItem1);
+    printf("g_sListItem1.pvContainer : 0x%p\r\n", g_sListItem1.pvContainer);
+    printf("g_sListItem1.pxPrevious : 0x%p\r\n", g_sListItem1.pxPrevious);
+    printf("g_sListItem1.pxNext : 0x%p\r\n", g_sListItem1.pxNext);
+    printf("g_sListItem1.xItemValue : %d\r\n", g_sListItem1.xItemValue);
+    printf("\r\n");
+    
+    
+    printf("g_sListItem2 : 0x%p\r\n", &g_sListItem2);
+    printf("g_sListItem2.pvContainer : 0x%p\r\n", g_sListItem2.pvContainer);
+    printf("g_sListItem2.pxPrevious : 0x%p\r\n", g_sListItem2.pxPrevious);
+    printf("g_sListItem2.pxNext : 0x%p\r\n", g_sListItem2.pxNext);
+    printf("g_sListItem2.xItemValue : %d\r\n", g_sListItem2.xItemValue);
+    printf("\r\n");
+    
+    printf("g_sListItem3 : 0x%p\r\n", &g_sListItem3);
+    printf("g_sListItem3.pvContainer : 0x%p\r\n", g_sListItem3.pvContainer);
+    printf("g_sListItem3.pxPrevious : 0x%p\r\n", g_sListItem3.pxPrevious);
+    printf("g_sListItem3.pxNext : 0x%p\r\n", g_sListItem3.pxNext);
+    printf("g_sListItem3.xItemValue : %d\r\n", g_sListItem3.xItemValue);
+    printf("\r\n");
+    
+    printf("g_sListItem4 : 0x%p\r\n", &g_sListItem4);
+    printf("g_sListItem4.pvContainer : 0x%p\r\n", g_sListItem4.pvContainer);
+    printf("g_sListItem4.pxPrevious : 0x%p\r\n", g_sListItem4.pxPrevious);
+    printf("g_sListItem4.pxNext : 0x%p\r\n", g_sListItem4.pxNext);
+    printf("g_sListItem4.xItemValue : %d\r\n", g_sListItem4.xItemValue);
+    printf("\r\n");
+
+
+
+}
+void Device_ListTest()
+{
+
+    vListInitialise(&g_sList);
+
+    vListInitialiseItem(&g_sListItem1);
+    vListInitialiseItem(&g_sListItem2);
+    vListInitialiseItem(&g_sListItem3);
+    vListInitialiseItem(&g_sListItem4);
+
+    g_sListItem1.xItemValue = 12;
+    g_sListItem2.xItemValue = 8;
+    g_sListItem3.xItemValue = 11;
+    g_sListItem4.xItemValue = 10;
+    //打印刚初始化后的列表信息
+    printf("/********************Init****************/\r\n");
+    Device_PrintfDemoInfo();
+    
+    printf("InsertEnd  ListItem1\r\n");
+    vListInsertEnd(&g_sList, &g_sListItem1);
+    Device_PrintfDemoInfo();
+    printf("InsertEnd  ListItem2\r\n");
+    vListInsertEnd(&g_sList, &g_sListItem2);
+    Device_PrintfDemoInfo();
+    printf("InsertEnd  ListItem3\r\n");
+    vListInsertEnd(&g_sList, &g_sListItem3);
+    Device_PrintfDemoInfo();
+    printf("InsertEnd  ListItem4\r\n");
+    vListInsertEnd(&g_sList, &g_sListItem4);
+    Device_PrintfDemoInfo();
+    
+    printf("Remove  ListItem1\r\n");
+    uxListRemove(&g_sListItem1);
+    Device_PrintfDemoInfo();
+    printf("Remove  ListItem2\r\n");
+    uxListRemove(&g_sListItem2);
+    Device_PrintfDemoInfo();
+    printf("Remove  ListItem3\r\n");
+    uxListRemove(&g_sListItem3);
+    Device_PrintfDemoInfo();
+    printf("Remove  ListItem4\r\n");
+    uxListRemove(&g_sListItem4);
+    Device_PrintfDemoInfo();
+    
+    
+    printf("Insert  ListItem1\r\n");
+    vListInsert(&g_sList, &g_sListItem1);
+    Device_PrintfDemoInfo();
+    printf("Insert  ListItem2\r\n");
+    vListInsert(&g_sList, &g_sListItem2);
+    Device_PrintfDemoInfo();
+    printf("Insert  ListItem3\r\n");
+    vListInsert(&g_sList, &g_sListItem3);
+    Device_PrintfDemoInfo();
+    printf("Insert  ListItem4\r\n");
+    vListInsert(&g_sList, &g_sListItem4);
+    Device_PrintfDemoInfo();
+}
 
 void Device_TaskCreat() 
 {
 	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
-
+    Device_ListTest();
 #if configSUPPORT_DYNAMIC_ALLOCATION
 	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
                 (const char * const) "Device_Task1",                             //函数名

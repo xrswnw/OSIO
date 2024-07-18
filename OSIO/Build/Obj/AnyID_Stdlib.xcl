@@ -1,20 +1,20 @@
-"E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c"
+"E:\AnyId\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -MD
 -MF
-E:\AnyID\Git\OSIO\OSIO\OSIO\Build\Obj\AnyID_Stdlib.pbi.dep
+E:\AnyId\Git\SoftWare\OSIO\OSIO\Build\Obj\AnyID_Stdlib.pbi.dep
 -o
 AnyID_Stdlib.pbi
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src
+E:\AnyId\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\inc
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\USB\inc
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\USB\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
 -I
@@ -22,13 +22,13 @@ E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\inc
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable\iar
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable\iar
 -I
-E:\AnyID\Git\OSIO\OSIO\OSIO\..\kernel\portable\MemMang
+E:\AnyId\Git\SoftWare\OSIO\OSIO\..\kernel\portable\MemMang
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I
@@ -38,11 +38,11 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc\c
 -I
-E:\AnyID\Git\OSIO\OSIO
+E:\AnyId\Git\SoftWare\OSIO
 -I
-E:\AnyID\Git\OSIO\OSIO\inc
+E:\AnyId\Git\SoftWare\OSIO\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\USB\inc
+E:\AnyId\Git\SoftWare\OSIO\USB\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
 -I
@@ -50,13 +50,13 @@ E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
 -I
 E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\kernel\inc
+E:\AnyId\Git\SoftWare\OSIO\kernel\inc
 -I
-E:\AnyID\Git\OSIO\OSIO\kernel\portable
+E:\AnyId\Git\SoftWare\OSIO\kernel\portable
 -I
-E:\AnyID\Git\OSIO\OSIO\kernel\portable\iar
+E:\AnyId\Git\SoftWare\OSIO\kernel\portable\iar
 -I
-E:\AnyID\Git\OSIO\OSIO\kernel\portable\MemMang
+E:\AnyId\Git\SoftWare\OSIO\kernel\portable\MemMang
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I
