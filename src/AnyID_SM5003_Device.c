@@ -703,7 +703,7 @@ void Device_ListTest()
 void Device_TaskCreat() 
 {
 	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
-    Device_ListTest();
+    //Device_ListTest();
 #if configSUPPORT_DYNAMIC_ALLOCATION
 	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
                 (const char * const) "Device_Task1",                             //函数名
@@ -779,8 +779,11 @@ void Device_Task1()
 
 void Device_Task2()
 {
+    u8 taskNum = 0, index = 0;
     u8 state = 0;
     TickType_t currentTime = 0;
+    UBaseType_t priori  = 0;
+    TaskStatus_t *pStateInfo = {0};
     const TickType_t delayTime = pdMS_TO_TICKS( 800UL );
 	while(1)
 	{
@@ -796,7 +799,24 @@ void Device_Task2()
 		}
         
         Device_Peintf("Task2 Runing\r\n"); 
-        //vTaskSuspend(Device_Task1Handle);
+        priori = uxTaskPriorityGet(NULL);
+        if(uxTaskPriorityGet(NULL) <= 30)
+        {
+          vTaskPrioritySet(NULL, uxTaskPriorityGet(NULL) + 1);
+        }//vTaskSuspend(Device_Task1Handle);
+        
+        taskNum = uxTaskGetNumberOfTasks();
+        pStateInfo = (TaskStatus_t *)malloc(sizeof(TaskStatus_t) * taskNum);
+        uxTaskGetSystemState(pStateInfo, taskNum, NULL);
+        for(index = 0; index < taskNum; index++)
+        {
+          printf("TaskName: %s\rTaskPriori: %d\rTaskNum: %d\rTaskRunTime: %d\r\n", 
+                                         pStateInfo[index].pcTaskName, 
+                                         pStateInfo[index].uxCurrentPriority, 
+                                         pStateInfo[index].xTaskNumber, 
+                                         pStateInfo[index].ulRunTimeCounter);
+        }
+        free(pStateInfo);
         vTaskDelay(delayTime);
 		//vTaskDelayUntil(&currentTime, delayTime);
 	}

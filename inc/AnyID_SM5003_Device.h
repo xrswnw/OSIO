@@ -7,7 +7,8 @@
 #include "AnyID_SM5003_FRam.h"
 #include "AnyID_SM5003_Fire_HL.h"
 #include "AnyID_SM5003_Water_HL.h"
-
+#include "stdio.h"
+#include "stdlib.h"
 #define DEVICE_VERSION_SIZE					50
 extern const u8 DEVICE_VERSION[DEVICE_VERSION_SIZE];
 

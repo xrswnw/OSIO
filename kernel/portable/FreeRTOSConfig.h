@@ -70,7 +70,7 @@ errata. */
 #define configMINIMAL_STACK_SIZE				( ( unsigned short ) 128 )			//空闲任务堆栈大小
 #define configTOTAL_HEAP_SIZE					( ( size_t ) ( 10 * 1024 ) )		//堆空间
 #define configMAX_TASK_NAME_LEN					( 20 )								//任务描述名长度
-#define configUSE_TRACE_FACILITY				1                                   //可视化函数跟踪
+#define configUSE_TRACE_FACILITY				1                                   //可视化函数跟踪,获取任务状态信息
 #define configUSE_16_BIT_TICKS					0                                   //滴答定时器范围。1 ：u16; 0 : u32
 #define configTICK_TYPE_WIDTH_IN_BITS           TICK_TYPE_WIDTH_32_BITS             //滴答“s”执行的次数。32位
 #define configUSE_TICKLESS_IDLE                 0                                   //低功耗模式
@@ -94,8 +94,8 @@ errata. */
 #define configUSE_DAEMON_TASK_STARTUP_HOOK      0                                   //定时器首次任务时回调。1:启用，需编写回调函数；0:不启用 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
-#define INCLUDE_vTaskPrioritySet		1
-#define INCLUDE_uxTaskPriorityGet		1
+#define INCLUDE_vTaskPrioritySet		1                                //任务优先级设置
+#define INCLUDE_uxTaskPriorityGet		1                               //获取任务优先级是能
 #define INCLUDE_vTaskDelete				1											//任务删除允许 
 #define INCLUDE_uxTaskGetStackHighWaterMark		1									//允许获取任务堆栈历史剩余最小值
 #define INCLUDE_vTaskCleanUpResources	1
