@@ -777,6 +777,7 @@ void Device_Task1()
 	}
 }
 
+char taskBuffer[500];
 void Device_Task2()
 {
     u8 taskNum = 0, index = 0;
@@ -800,7 +801,7 @@ void Device_Task2()
         
         Device_Peintf("Task2 Runing\r\n"); 
         priori = uxTaskPriorityGet(NULL);
-        if(uxTaskPriorityGet(NULL) <= 30)
+        if(uxTaskPriorityGet(NULL) < 30)
         {
           vTaskPrioritySet(NULL, uxTaskPriorityGet(NULL) + 1);
         }//vTaskSuspend(Device_Task1Handle);
@@ -810,13 +811,20 @@ void Device_Task2()
         uxTaskGetSystemState(pStateInfo, taskNum, NULL);
         for(index = 0; index < taskNum; index++)
         {
-          printf("TaskName: %s\rTaskPriori: %d\rTaskNum: %d\rTaskRunTime: %d\r\n", 
+          printf("TaskName: %s  TaskPriori: %d  TaskNum: %d  TaskRunTime: %d\r\n", 
                                          pStateInfo[index].pcTaskName, 
                                          pStateInfo[index].uxCurrentPriority, 
                                          pStateInfo[index].xTaskNumber, 
                                          pStateInfo[index].ulRunTimeCounter);
         }
+        TaskStatus_t *currTask = NULL;
+        currTask = malloc(sizeof(TaskStatus_t));
+        
+        vTaskGetInfo(xTaskGetHandle(NULL), currTask, pdTRUE, eInvalid);
         free(pStateInfo);
+        free(currTask);
+        
+        //vTaskGetRunTimeStats(taskBuffer);
         vTaskDelay(delayTime);
 		//vTaskDelayUntil(&currentTime, delayTime);
 	}

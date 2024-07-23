@@ -81,9 +81,20 @@ errata. */
 #define configUSE_MALLOC_FAILED_HOOK			0                                   //malloc函数回调。1:启用，需编写回调函数；0:不启用   void vApplicationMallocFailedHook( void );
 #define configUSE_APPLICATION_TASK_TAG			0
 #define configUSE_COUNTING_SEMAPHORES			1
-#define configGENERATE_RUN_TIME_STATS			0
-#define configUSE_QUEUE_SETS					1
+#define configGENERATE_RUN_TIME_STATS			0                               //统计任务运行时间
 
+
+#if configGENERATE_RUN_TIME_STATS
+  #include "../../inc/AnyID_Tim_HL.h"
+  extern uint32_t FreeRTOSRunTimeTicks;
+  #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()                ConfigureTimeForRunTimeStats()                        //初始化计时任务的时基定时器
+  #define portALT_GET_RUN_TIME_COUNTER_VALUE()                    FreeRTOSRunTimeTicks                                  //获取定时器的硬件定时器计数值，此计时任务精度较高，一般为系统时基的10-100倍
+
+#endif
+
+
+#define configUSE_QUEUE_SETS                            1
+#define configUSE_STATS_FORMATTING_FUNCTIONS             0                              //统计任务运行时间  vTaskList()
 
 
 /* Software timer definitions. */
@@ -104,6 +115,8 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil			1											//允许任务绝对时间堵塞
 #define INCLUDE_vTaskDelay				1											//允许任务堵塞
 #define INCLUDE_xTaskAbortDelay         1                                           //允许任务强制离开阻塞态
+
+#define INCLUDE_xTaskGetHandle          1       //获取任务句柄
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
 	/* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
