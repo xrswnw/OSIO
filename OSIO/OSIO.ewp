@@ -354,13 +354,14 @@
                     <state>$PROJ_DIR$\..\</state>
                     <state>$PROJ_DIR$\..\inc</state>
                     <state>$PROJ_DIR$\..\USB\inc</state>
-                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup</state>
-                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc</state>
-                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc</state>
+                    <state>$PROJ_DIR$\..\StdLib\inc</state>
+                    <state>$PROJ_DIR$\..\StdLib\startup</state>
+                    <state>$PROJ_DIR$\..\OtrLib\inc</state>
                     <state>$PROJ_DIR$\..\kernel\inc</state>
                     <state>$PROJ_DIR$\..\kernel\portable</state>
                     <state>$PROJ_DIR$\..\kernel\portable\iar</state>
                     <state>$PROJ_DIR$\..\kernel\portable\MemMang</state>
+                    <state>$PROJ_DIR$\..\kernel\periph\inc</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1219,9 +1220,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\src\AnyID_Tim_HL.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\src\AnyID_Uart_Receive.c</name>

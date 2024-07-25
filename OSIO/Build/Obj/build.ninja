@@ -57,7 +57,6 @@ build AnyID_SM5003_SysTick_HL.pbi : index AnyID_SM5003_SysTick_HL.xcl
 build AnyID_SM5003_Water_HL.pbi : index AnyID_SM5003_Water_HL.xcl
 build AnyID_SM5003_WDG_HL.pbi : index AnyID_SM5003_WDG_HL.xcl
 build AnyID_Stdlib.pbi : index AnyID_Stdlib.xcl
-build AnyID_Tim_HL.pbi : index AnyID_Tim_HL.xcl
 build AnyID_Uart_Receive.pbi : index AnyID_Uart_Receive.xcl
 build OSIO_part0.pbi : link system_stm32f10x.pbi port.pbi heap_4.pbi croutine.pbi event_groups.pbi list.pbi
 build OSIO_part1.pbi : link queue.pbi stream_buffer.pbi tasks.pbi timers.pbi main.pbi stm32f10x_it.pbi
@@ -65,7 +64,7 @@ build OSIO_part2.pbi : link misc.pbi stm32f10x_adc.pbi stm32f10x_dma.pbi stm32f1
 build OSIO_part3.pbi : link stm32f10x_iwdg.pbi stm32f10x_rcc.pbi stm32f10x_spi.pbi stm32f10x_tim.pbi stm32f10x_usart.pbi AnyID_FRam.pbi
 build OSIO_part4.pbi : link AnyID_SM5003_AD.pbi AnyID_SM5003_AD_HL.pbi AnyID_SM5003_Device.pbi AnyID_SM5003_Fire_HL.pbi AnyID_SM5003_FRam.pbi AnyID_SM5003_FRam_HL.pbi
 build OSIO_part5.pbi : link AnyID_SM5003_R485.pbi AnyID_SM5003_R485_HL.pbi AnyID_SM5003_SysCfg.pbi AnyID_SM5003_SysTick_HL.pbi AnyID_SM5003_Water_HL.pbi AnyID_SM5003_WDG_HL.pbi
-build OSIO_part6.pbi : link AnyID_Stdlib.pbi AnyID_Tim_HL.pbi AnyID_Uart_Receive.pbi
+build OSIO_part6.pbi : link AnyID_Stdlib.pbi AnyID_Uart_Receive.pbi
 build OSIO.pbd : link OSIO_part0.pbi OSIO_part1.pbi OSIO_part2.pbi OSIO_part3.pbi OSIO_part4.pbi OSIO_part5.pbi OSIO_part6.pbi
 build OSIO.pbw : browsedata OSIO.pbd
 

@@ -159,7 +159,19 @@ void Device_LedTask();
 
 
 
+extern TaskHandle_t Device_QueueTask1Handle;
+extern TaskHandle_t Device_QueueTask2Handle;
+extern TaskHandle_t Device_QueueTask3Handle;
+void Device_QueueTask1();
+void Device_QueueTask2();;
+void Device_QueueTask3();
+ void Device_QueueCreat();
 //demo
 void Device_TaskCreat();
 //
+#if configGENERATE_RUN_TIME_STATS
+    extern uint32_t FreeRTOSRunTimeTicks ;
+    void Tim_Init(u32 period, u32 prescaler);
+    void ConfigureTimeForRunTimeStats();
+#endif
 #endif

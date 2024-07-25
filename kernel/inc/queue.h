@@ -65,17 +65,17 @@ typedef struct QueueDefinition   * QueueSetHandle_t;
 typedef struct QueueDefinition   * QueueSetMemberHandle_t;
 
 /* For internal use only. */
-#define queueSEND_TO_BACK                     ( ( BaseType_t ) 0 )
-#define queueSEND_TO_FRONT                    ( ( BaseType_t ) 1 )
-#define queueOVERWRITE                        ( ( BaseType_t ) 2 )
+#define queueSEND_TO_BACK                     ( ( BaseType_t ) 0 )                      //写入队列尾部
+#define queueSEND_TO_FRONT                    ( ( BaseType_t ) 1 )                      //写入队列头部
+#define queueOVERWRITE                        ( ( BaseType_t ) 2 )                      //覆写队列（队列项为1时）
 
 /* For internal use only.  These definitions *must* match those in queue.c. */
-#define queueQUEUE_TYPE_BASE                  ( ( uint8_t ) 0U )
-#define queueQUEUE_TYPE_SET                   ( ( uint8_t ) 0U )
-#define queueQUEUE_TYPE_MUTEX                 ( ( uint8_t ) 1U )
-#define queueQUEUE_TYPE_COUNTING_SEMAPHORE    ( ( uint8_t ) 2U )
-#define queueQUEUE_TYPE_BINARY_SEMAPHORE      ( ( uint8_t ) 3U )
-#define queueQUEUE_TYPE_RECURSIVE_MUTEX       ( ( uint8_t ) 4U )
+#define queueQUEUE_TYPE_BASE                  ( ( uint8_t ) 0U )                        //队列
+#define queueQUEUE_TYPE_SET                   ( ( uint8_t ) 0U )                        //队列集
+#define queueQUEUE_TYPE_MUTEX                 ( ( uint8_t ) 1U )                        //互斥信号量
+#define queueQUEUE_TYPE_COUNTING_SEMAPHORE    ( ( uint8_t ) 2U )                        //计数型信号量
+#define queueQUEUE_TYPE_BINARY_SEMAPHORE      ( ( uint8_t ) 3U )                        //二值信号量
+#define queueQUEUE_TYPE_RECURSIVE_MUTEX       ( ( uint8_t ) 4U )                        //递归互斥信号量
 
 /**
  * queue. h

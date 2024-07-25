@@ -2739,7 +2739,7 @@ BaseType_t xTaskIncrementTick( void )
         xTickCount = xConstTickCount;
 
         if( xConstTickCount == ( TickType_t ) 0U ) /*lint !e774 'if' does not always evaluate to false as it is looking for an overflow. */
-        {
+        {               //溢出
             taskSWITCH_DELAYED_LISTS();
         }
         else
@@ -5339,6 +5339,7 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
             xTimeToWake = xConstTickCount + xTicksToWait;
 
             /* The list item will be inserted in wake time order. */
+            //按堵塞时间排序插入
             listSET_LIST_ITEM_VALUE( &( pxCurrentTCB->xStateListItem ), xTimeToWake );
 
             if( xTimeToWake < xConstTickCount )
@@ -5351,6 +5352,7 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
             {
                 /* The wake time has not overflowed, so the current block list
                  * is used. */
+              //挂起至堵塞列表
                 vListInsert( pxDelayedTaskList, &( pxCurrentTCB->xStateListItem ) );
 
                 /* If the task entering the blocked state was placed at the

@@ -538,7 +538,7 @@ void Device_LedTask()
                 Device_RunLedOff();
                 vTaskDelayUntil(&currentTime, delayTime);
                 Device_AlarmLedOff();
-                vTaskDelayUntil(&currentTime, delayTime);
+                vTaskDelayUntil(&currentTime, delayTime);               //绝对延时 
         #endif
     }
 #endif
@@ -704,7 +704,9 @@ void Device_TaskCreat()
 {
 	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
     //Device_ListTest();
+  Device_QueueCreat();
 #if configSUPPORT_DYNAMIC_ALLOCATION
+    /*
 	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
                 (const char * const) "Device_Task1",                             //函数名
                 (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
@@ -723,6 +725,26 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+  */
+    
+    xTaskCreate((TaskFunction_t) Device_QueueTask1,                                   //函数地址
+                (const char * const) "Device_QueueTask1",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 2,                                                //优先级
+                (TaskHandle_t *) &Device_QueueTask1Handle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_QueueTask2, 
+                (const char * const) "Device_QueueTask2", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_QueueTask1Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_QueueTask3, 
+                (const char * const) "Device_QueueTask3", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_QueueTask1Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
 #endif	
 	
 #if configSUPPORT_STATIC_ALLOCATION
@@ -770,7 +792,8 @@ void Device_Task1()
 			Device_RunLedOff();
 		}
        
-        Device_Peintf("Task1 Runing\r\n"); 
+        printf("Task1 Runing\r\n"); 
+         printf("\r\n");
         //vTaskSuspend(Device_Task2Handle);
         vTaskDelay(delayTime);
 		vTaskDelayUntil(&currentTime, delayTime);
@@ -799,7 +822,8 @@ void Device_Task2()
 			Device_AlarmLedOff();
 		}
         
-        Device_Peintf("Task2 Runing\r\n"); 
+        printf("Task2 Runing\r\n"); 
+        printf("\r\n");
         priori = uxTaskPriorityGet(NULL);
         if(uxTaskPriorityGet(NULL) < 30)
         {
@@ -816,6 +840,7 @@ void Device_Task2()
                                          pStateInfo[index].uxCurrentPriority, 
                                          pStateInfo[index].xTaskNumber, 
                                          pStateInfo[index].ulRunTimeCounter);
+          printf("\r\n\r\n");
         }
         TaskStatus_t *currTask = NULL;
         currTask = malloc(sizeof(TaskStatus_t));
@@ -824,7 +849,9 @@ void Device_Task2()
         free(pStateInfo);
         free(currTask);
         
-        //vTaskGetRunTimeStats(taskBuffer);
+        vTaskGetRunTimeStats(taskBuffer);
+        printf("\r\n\r\n\r\n");
+        printf(taskBuffer);
         vTaskDelay(delayTime);
 		//vTaskDelayUntil(&currentTime, delayTime);
 	}
@@ -843,7 +870,8 @@ void Device_Task3()
             {
                 state = 1;
                 vTaskSuspend(Device_Task2Handle);       //获取任务状态，不能一直挂起
-                Device_Peintf("ISR OP, Suspend Task2\r\n");
+                printf("ISR OP, Suspend Task2\r\n");
+                 printf("\r\n");
             }
 		}
 		else if(g_nKeyValue == 2)
@@ -857,7 +885,8 @@ void Device_Task3()
                 state = 0;
             }
         }
-        Device_Peintf("Task3 Runing\r\n"); 
+        printf("Task3 Runing\r\n"); 
+         printf("\r\n");
         vTaskDelay(delayTime);
         //vTaskDelayUntil(&currentTime, delayTime);
 	}
@@ -890,4 +919,94 @@ void vApplicationGetTimerTaskMemory(StaticTask_t ** ppxTimerTaskTCBBuffer,
 	*pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
 }
 #endif
+
+
+
+#if configGENERATE_RUN_TIME_STATS
+    uint32_t FreeRTOSRunTimeTicks = 0;
+    void Tim_Init(u32 period, u32 prescaler)
+    {
+        TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+        NVIC_InitTypeDef NVIC_InitStructure;
+        
+        TIM_TimeBaseStructure.TIM_Period = period;             
+        TIM_TimeBaseStructure.TIM_Prescaler = prescaler;         
+        TIM_TimeBaseStructure.TIM_ClockDivision = 0;            
+        TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;    
+        TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);   
+
+        TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE ); //使能指定的TIM3中断,允许更新中断
+        
+        //中断优先级NVIC设置
+        NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;  //TIM3中断
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 4;  //先占优先级4级
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
+        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
+        NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
+
+        TIM_Cmd(TIM2, ENABLE);  
+    }
+
+    void ConfigureTimeForRunTimeStats()
+    {
+
+       Tim_Init(10 - 1, 72 -1);
+    }
+#endif
+
+    
+    QueueHandle_t key_Queue = {0};
+    QueueHandle_t big_DateQuene = {0};
+    u8 buffer[100] = {0};
+ void Device_QueueCreat()
+ {
+    key_Queue = xQueueCreate(3, 1);
+    big_DateQuene = xQueueCreate(10, 128);
+ 
+    if((key_Queue != NULL) && (big_DateQuene != NULL))
+    {
+   
+   
+    }
+ }
+    
+    
+TaskHandle_t Device_QueueTask1Handle;
+TaskHandle_t Device_QueueTask2Handle;
+TaskHandle_t Device_QueueTask3Handle;
+
+void Device_QueueTask1()
+{ 
+  u8 i = 0;
+  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  while(1)
+  {
+    i += 9;
+    xQueueSend(key_Queue, &i, portMAX_DELAY);
+    vTaskDelay(delayTime);
+  }
+
+
+}
+
+void Device_QueueTask2()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  while(1)
+  {
+  vTaskDelay(delayTime);
+  }
+
+
+}
+
+void Device_QueueTask3()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  while(1)
+  {
+  vTaskDelay(delayTime);
+  }
+
+
+}
+
 //--

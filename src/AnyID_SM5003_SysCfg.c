@@ -81,6 +81,7 @@ void Sys_CfgPeriphClk(FunctionalState state)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 |
                            RCC_APB1Periph_TIM4 |
                            RCC_APB1Periph_TIM2, state);
+    
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
                            RCC_APB2Periph_GPIOB |
                            RCC_APB2Periph_GPIOC |
@@ -193,7 +194,7 @@ void Sys_Init(void)
     Sys_DisableInt();
     
     Device_CtrlIOInit();
-    
+    ConfigureTimeForRunTimeStats();
     Sys_EnableInt();
     
     //vTaskSuspendAll();

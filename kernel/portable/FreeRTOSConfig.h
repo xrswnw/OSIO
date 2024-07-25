@@ -81,20 +81,18 @@ errata. */
 #define configUSE_MALLOC_FAILED_HOOK			0                                   //malloc函数回调。1:启用，需编写回调函数；0:不启用   void vApplicationMallocFailedHook( void );
 #define configUSE_APPLICATION_TASK_TAG			0
 #define configUSE_COUNTING_SEMAPHORES			1
-#define configGENERATE_RUN_TIME_STATS			0                               //统计任务运行时间
-
+#define configGENERATE_RUN_TIME_STATS			1                               //统计任务运行时间
 
 #if configGENERATE_RUN_TIME_STATS
-  #include "../../inc/AnyID_Tim_HL.h"
-  extern uint32_t FreeRTOSRunTimeTicks;
-  #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()                ConfigureTimeForRunTimeStats()                        //初始化计时任务的时基定时器
-  #define portALT_GET_RUN_TIME_COUNTER_VALUE()                    FreeRTOSRunTimeTicks                                  //获取定时器的硬件定时器计数值，此计时任务精度较高，一般为系统时基的10-100倍
-
+    //#include "../periph/inc/periph.h"
+    extern uint32_t FreeRTOSRunTimeTicks;
+    #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()    ConfigureTimeForRunTimeStats()                        //初始化计时任务的时基定时器
+    #define portGET_RUN_TIME_COUNTER_VALUE()            FreeRTOSRunTimeTicks	//获取时间统计时间值
 #endif
 
 
 #define configUSE_QUEUE_SETS                            1
-#define configUSE_STATS_FORMATTING_FUNCTIONS             0                              //统计任务运行时间  vTaskList()
+#define configUSE_STATS_FORMATTING_FUNCTIONS             1                              //统计任务运行时间  vTaskList()
 
 
 /* Software timer definitions. */

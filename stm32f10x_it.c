@@ -225,6 +225,14 @@ void R485_IRQHandler(void)
 /**
   * @}
   */
-
+void TIM2_IRQHandler()
+{
+    if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //溢出中断
+	{
+		FreeRTOSRunTimeTicks++;
+        TIM_ClearITPendingBit(TIM2,TIM_IT_Update);  //清除中断标志位
+	}
+	
+}
 
 /******************* (C) COPYRIGHT 2010 STMicroelectronics *****END OF FILE****/

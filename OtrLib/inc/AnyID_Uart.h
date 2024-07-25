@@ -1,0 +1,161 @@
+#ifndef _ANYID_UART_
+#define _ANYID_UART_
+
+
+#if defined(_ANYID_BWCOM_)
+    #include "AnyID_BWCOM_Uart_HL.h"
+#elif defined(_ANYID_BLDC_)
+    #include "AnyID_BLDC_Uart_HL.h"
+#elif defined(_ANYID_WVCU_)
+    #include "AnyID_WVCU_Uart_HL.h"
+#elif defined(_ANYID_UPDATE_)
+    #include "AnyID_Update_Uart_HL.h"
+#elif defined(_ANYID_INFCOLLECTION_)
+    #include "AnyID_InfCollection_Uart_HL.h"
+#elif defined(_ANYID_GENERALDEVICE_)
+    #include "AnyID_GeneralDevice_Uart_HL.h"
+#elif defined(_ANYID_PDA_)
+    #include "AnyID_PDA_Uart_HL.h"
+#elif defined(_ANYID_HSR101_)
+    #include "AnyID_HSR101_Uart_HL.h"
+#elif defined(_ANYID_HMR100_)
+    #include "AnyID_HMR100_Uart_HL.h"
+#elif defined(_ANYID_HLR600_)
+    #include "AnyID_HLR600_Uart_HL.h"
+#elif defined(_ANYID_STBT100_)
+    #include "AnyID_STBT100_Uart_HL.h"
+#elif defined(_ANYID_HSW300_)
+    #include "AnyID_HSW300_Uart_HL.h"
+#elif defined(_ANYID_M330_)
+    #include "AnyID_M330_Uart_HL.h"
+#elif defined(_ANYID_R320_)
+    #include "AnyID_R320_Uart_HL.h"
+#elif defined(_ANYID_R322_)
+    #include "AnyID_R322_Uart_HL.h"
+#elif defined(_ANYID_ODF_)
+    #include "AnyID_ODF_Uart_HL.h"
+#elif defined(_ANYID_D320_)
+    #include "AnyID_D320_Uart_HL.h"
+#elif defined(_ANYID_T851_)
+    #include "AnyID_T851_Uart_HL.h"
+#elif defined(_ANYID_M321_)
+    #include "AnyID_M321_Uart_HL.h"
+#elif defined(_ANYID_R321_)
+    #include "AnyID_R321_Uart_HL.h"
+#elif defined(_ANYID_M322_)
+    #include "AnyID_M322_Uart_HL.h"
+#elif defined(_ANYID_D320_)
+    #include "AnyID_D320_Uart_HL.h"
+#elif defined(_ANYID_M343_)
+    #include "AnyID_M343_Uart_HL.h"
+#elif defined(_ANYID_M323_)
+    #include "AnyID_M323_Uart_HL.h"
+#elif defined(_ANYID_M121_)
+    #include "AnyID_M121_Uart_HL.h"
+#elif defined(_ANYID_M324_)
+    #include "AnyID_M324_Uart_HL.h"
+#elif defined(_ANYID_M325_)
+    #include "AnyID_M325_Uart_HL.h"
+#elif defined(_ANYID_T951_)
+    #include "AnyID_T951_Uart_HL.h"
+#elif defined(_ANYID_D321_)
+    #include "AnyID_D321_Uart_HL.h"
+#elif defined(_ANYID_T320_)
+    #include "AnyID_T320_Uart_HL.h"
+#elif defined(_ANYID_FLY_)
+    #include "AnyID_FLY_Uart_HL.h"
+#elif defined(_ANYID_N232_)
+    #include "AnyID_N232_Uart_HL.h"
+#elif defined(_ANYID_R323_)
+    #include "AnyID_R323_Uart_HL.h"
+#elif defined(_ANYID_H755_)
+    #include "AnyID_H755_Uart_HL.h"
+#elif defined(_ANYID_R542_)
+    #include "AnyID_R542_Uart_HL.h"
+#elif defined(_ANYID_R542S_)
+    #include "AnyID_R542_Uart_HL.h"
+#elif defined(_ANYID_R542A_)
+    #include "AnyID_R542_Uart_HL.h"
+#elif defined(_ANYID_R5422_)
+    #include "AnyID_R542_Uart_HL.h"
+#elif (defined(_ANYID_R547_) || defined(_ANYID_D543A_))
+    #include "AnyID_R542_Uart_HL.h"
+#elif defined(_ANYID_R541_)
+    #include "AnyID_R541_Uart_HL.h"
+#elif defined(_ANYID_R327_)
+    #include "AnyID_R327_Uart_HL.h"
+#elif defined(_ANYID_R327AWG_)
+    #include "AnyID_R327WG_Uart_HL.h"
+#elif defined(_ANYID_D327_)
+    #include "AnyID_D327_Uart_HL.h"
+#elif defined(_ANYID_D327AWG_)
+    #include "AnyID_D327_Uart_HL.h"
+#elif defined(_ANYID_D328_)
+    #include "AnyID_D328_Uart_HL.h"
+#elif defined(_ANYID_M328_)
+    #include "AnyID_M328_Uart_HL.h"
+#elif defined(_ANYID_D322_)
+    #include "AnyID_D322_Uart_HL.h"
+#elif defined(_ANYID_M345_)
+    #include "AnyID_M345_Uart_HL.h"
+#elif defined(_ANYID_M345PER_)
+    #include "AnyID_M345_Uart_HL.h"
+#elif defined(_ANYID_T854B_)
+    #include "AnyID_T854B_Uart_HL.h"
+#elif defined(_ANYID_G540_)
+    #include "AnyID_G540_Uart_HL.h"
+#elif defined(_ANYID_G541_)
+    #include "AnyID_G541_Uart_HL.h"
+#elif defined(_ANYID_G541M_)
+    #include "AnyID_G541M_Uart_HL.h"
+#elif defined(_ANYID_G853_)
+    #include "AnyID_G853_Uart_HL.h"
+#elif defined(_ANYID_R342N_)
+    #include "AnyID_R342N_Uart_HL.h"
+#elif defined(_ANYID_D328_)
+    #include "AnyID_D328_Uart_HL.h"
+#elif defined(_ANYID_M329_)
+    #include "AnyID_M328_Uart_HL.h"
+#elif defined(_ANYID_D327B_)
+    #include "AnyID_D327B_Uart_HL.h"
+#elif (defined(_ANYID_R543_) || defined(_ANYID_FR540_))
+    #include "AnyID_R543_Uart_HL.h"
+#elif (defined(_ANYID_R545_))
+    #include "AnyID_R545_Uart_HL.h"
+#elif defined(_ANYID_M520_)
+    #include "AnyID_M520_Uart_HL.h"
+#elif defined(_ANYID_T2_)
+    #include "AnyID_T2_Uart_HL.h"
+#elif defined(_ANYID_AS200_)
+    #include "AnyID_AS200_Uart_HL.h"
+#elif defined(_ANYID_G30_)
+    #include "AnyID_G30_Uart_HL.h"
+#elif defined(_ANYID_FR540P_)
+    #include "AnyID_R543_Uart_HL.h"
+#elif defined(_ANYID_FR540SP_)
+    #include "AnyID_R543_Uart_HL.h"
+#elif defined(_ANYID_FR540S_)
+    #include "AnyID_R543_Uart_HL.h"
+#elif defined(_ANYID_FR540_)
+    #include "AnyID_FR540_Uart_HL.h"
+#elif defined(_ANYID_M4_)
+    #include "AnyID_M4_Uart_HL.h"
+#elif defined(_ANYID_M328GW_)
+    #include "AnyID_M328GW_Uart_HL.h"
+#elif defined(_ANYID_R328HD_)
+    #include "AnyID_M328_Uart_HL.h"
+#elif defined(_ANYID_D323_)
+    #include "AnyID_D323_Uart_HL.h"
+#elif defined(_ANYID_X321_)
+    #include "AnyID_R322_Uart_HL.h"
+#elif defined(_ANYID_D543FNX_)
+    #include "AnyID_R542_Uart_HL.h"
+#endif
+
+void Uart_WriteBuffer(u8 *pBuffer, u32 len);
+void Uart_WriteString(u8 *pString);
+void Uart_WriteD(s32 data);
+void Uart_WriteH(u32 data);
+void Uart_WriteArray(u8 *pFrame, u8 len);
+
+#endif

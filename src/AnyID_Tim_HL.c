@@ -11,8 +11,8 @@ void Tim_Init(u32 period, u32 prescaler)
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);   
 }
 
-
-void ConfigureTimeForRunTimeStats()
+uint32_t FreeRTOSRunTimeTicks = 0;
+void portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
 {
 
    Tim_Init(10 - 1, 72 -1);

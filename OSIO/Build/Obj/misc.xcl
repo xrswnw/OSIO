@@ -16,11 +16,11 @@ E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc
 -I
 E:\AnyID\HFReader\Git\OSIO\OSIO\..\USB\inc
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
+E:\AnyID\HFReader\Git\OSIO\OSIO\..\StdLib\inc
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
+E:\AnyID\HFReader\Git\OSIO\OSIO\..\StdLib\startup
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
+E:\AnyID\HFReader\Git\OSIO\OSIO\..\OtrLib\inc
 -I
 E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc
 -I
@@ -29,6 +29,8 @@ E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\portable
 E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\portable\iar
 -I
 E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\portable\MemMang
+-I
+E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\periph\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I
@@ -44,11 +46,11 @@ E:\AnyID\HFReader\Git\OSIO\inc
 -I
 E:\AnyID\HFReader\Git\OSIO\USB\inc
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
+E:\AnyID\HFReader\Git\OSIO\StdLib\inc
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
+E:\AnyID\HFReader\Git\OSIO\StdLib\startup
 -I
-E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
+E:\AnyID\HFReader\Git\OSIO\OtrLib\inc
 -I
 E:\AnyID\HFReader\Git\OSIO\kernel\inc
 -I
@@ -57,6 +59,8 @@ E:\AnyID\HFReader\Git\OSIO\kernel\portable
 E:\AnyID\HFReader\Git\OSIO\kernel\portable\iar
 -I
 E:\AnyID\HFReader\Git\OSIO\kernel\portable\MemMang
+-I
+E:\AnyID\HFReader\Git\OSIO\kernel\periph\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\CMSIS\Core\Include
 -I

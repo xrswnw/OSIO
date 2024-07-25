@@ -1338,9 +1338,6 @@
             <name>$PROJ_DIR$\..\..\..\..\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\src\AnyID_Tim_HL.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\src\AnyID_Uart_Receive.c</name>
         </file>
     </group>
