@@ -937,7 +937,7 @@
                     <item>FreeRTOSRunTimeTicks</item>
                     <item>taskBuffer</item>
                     <item>key_Queue</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

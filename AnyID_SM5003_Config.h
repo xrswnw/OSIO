@@ -26,6 +26,7 @@
     #include "FreeRTOS.h"
 	#include "task.h"
 	#include "queue.h"
+    #include "semphr.h"
 #endif
 
 //优先级分组是2:2

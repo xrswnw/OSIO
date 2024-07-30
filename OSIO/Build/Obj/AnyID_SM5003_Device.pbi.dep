@@ -15,6 +15,7 @@ AnyID_SM5003_Device.pbi: \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc\AnyID_SM5003_R485.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc\AnyID_SM5003_AD_HL.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc\AnyID_SM5003_AD.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\semphr.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\queue.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\list.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\task.h \

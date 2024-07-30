@@ -48,4 +48,6 @@ AnyID_SM5003_R485.pbi: E:\AnyID\HFReader\Git\OSIO\src\AnyID_SM5003_R485.c \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/list.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\queue.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/task.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\semphr.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/queue.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc/AnyID_Uart_Receive.h

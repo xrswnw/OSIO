@@ -699,12 +699,23 @@ void Device_ListTest()
     vListInsert(&g_sList, &g_sListItem4);
     Device_PrintfDemoInfo();
 }
-
+QueueHandle_t g_nSemaphoreHandle = 0;
 void Device_TaskCreat() 
 {
 	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
     //Device_ListTest();
   Device_QueueCreat();
+  
+  g_nSemaphoreHandle = xSemaphoreCreateBinary();
+  
+  if(g_nSemaphoreHandle == NULL)
+  {
+    //while(1)
+    {
+        printf("semaphore creat err");
+    }
+    //创建失败
+  }
 #if configSUPPORT_DYNAMIC_ALLOCATION
     /*
 	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
@@ -725,7 +736,7 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_Task3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
-  */
+ 
     
     xTaskCreate((TaskFunction_t) Device_QueueTask1,                                   //函数地址
                 (const char * const) "Device_QueueTask1",                             //函数名
@@ -744,7 +755,27 @@ void Device_TaskCreat()
                 (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
-                (TaskHandle_t *) &Device_QueueTask1Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+                (TaskHandle_t *) &Device_QueueTask1Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入 */
+    xTaskCreate((TaskFunction_t) Device_SemaphoreTask1,                                   //函数地址
+                (const char * const) "Device_QueueTask1",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 2,                                                //优先级
+                (TaskHandle_t *) &Device_SemaphoreTask1Handle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_SemaphoreTask2, 
+                (const char * const) "Device_SemaphoreTask2", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_SemaphoreTask2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_SemaphoreTask3, 
+                (const char * const) "Device_SemaphoreTask13", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_SemaphoreTask3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+  
+  
 #endif	
 	
 #if configSUPPORT_STATIC_ALLOCATION
@@ -1003,10 +1034,59 @@ void Device_QueueTask3()
 {  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
   while(1)
   {
-  vTaskDelay(delayTime);
+        vTaskDelay(delayTime);
   }
 
 
 }
 
+
+
+TaskHandle_t Device_SemaphoreTask1Handle;
+TaskHandle_t Device_SemaphoreTask2Handle;
+TaskHandle_t Device_SemaphoreTask3Handle;
+
+
+void Device_SemaphoreTask1()
+{ 
+
+  while(1)
+  {
+    if(g_nKeyValue & 0x01)
+    {
+        if(xSemaphoreGive(g_nSemaphoreHandle) == pdFALSE)
+    {
+            printf("Give semaphpre err!!!");
+    }
+  }
+  }
+
+
+}
+
+void Device_SemaphoreTask2()
+{  
+  while(1)
+  {
+        if(xSemaphoreTake(g_nSemaphoreHandle, portMAX_DELAY) == pdTRUE)      //堵塞,死等
+        {
+            printf("Take Semaphore OK");
+        }
+        else{
+        printf("Take Semaphore ERR");
+        }
+  }
+
+
+}
+
+void Device_SemaphoreTask3()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  while(1)
+  {
+        vTaskDelay(delayTime);
+  }
+
+
+}
 //--

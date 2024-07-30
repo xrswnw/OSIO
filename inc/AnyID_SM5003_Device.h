@@ -174,4 +174,14 @@ void Device_TaskCreat();
     void Tim_Init(u32 period, u32 prescaler);
     void ConfigureTimeForRunTimeStats();
 #endif
+    
+    
+    
+extern TaskHandle_t Device_SemaphoreTask1Handle;
+extern TaskHandle_t Device_SemaphoreTask2Handle;
+extern TaskHandle_t Device_SemaphoreTask3Handle;
+
+void Device_SemaphoreTask1();
+void Device_SemaphoreTask2();
+void Device_SemaphoreTask3();
 #endif

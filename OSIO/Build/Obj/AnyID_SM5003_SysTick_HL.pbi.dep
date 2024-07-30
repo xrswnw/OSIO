@@ -47,4 +47,6 @@ AnyID_SM5003_SysTick_HL.pbi: \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\task.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/list.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\queue.h \
-  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/task.h
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/task.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\semphr.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/queue.h

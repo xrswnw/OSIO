@@ -49,6 +49,8 @@ AnyID_SM5003_Fire_HL.pbi: \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/list.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\queue.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/task.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc\semphr.h \
+  E:\AnyID\HFReader\Git\OSIO\OSIO\..\kernel\inc/queue.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc/AnyID_SM5003_SysTick_HL.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc/AnyID_SM5003_Device.h \
   E:\AnyID\HFReader\Git\OSIO\OSIO\..\inc/AnyID_SM5003_WDG_HL.h \
