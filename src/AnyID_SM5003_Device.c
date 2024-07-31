@@ -699,15 +699,18 @@ void Device_ListTest()
     vListInsert(&g_sList, &g_sListItem4);
     Device_PrintfDemoInfo();
 }
-QueueHandle_t g_nSemaphoreHandle = 0;
+QueueHandle_t g_nSemaphoreHandle = 0;       //二进制信号量
+QueueHandle_t g_nMutesSemaphoreHandle = 0;       //互斥二进制信号量
+QueueHandle_t g_nSemaphorePriorityHandle = 0;       //二进制信号量，，优先级翻转测试
+QueueHandle_t g_nSemaphoreCountHandle = 0;       //二进制信号量
 void Device_TaskCreat() 
 {
-	//portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
+	portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
     //Device_ListTest();
   Device_QueueCreat();
   
-  g_nSemaphoreHandle = xSemaphoreCreateBinary();
-  
+  g_nSemaphoreHandle = xSemaphoreCreateBinary();        //二进制信号量创建
+
   if(g_nSemaphoreHandle == NULL)
   {
     //while(1)
@@ -716,6 +719,9 @@ void Device_TaskCreat()
     }
     //创建失败
   }
+  
+  g_nSemaphoreCountHandle = xSemaphoreCreateCounting(199, 0);
+  
 #if configSUPPORT_DYNAMIC_ALLOCATION
     /*
 	xTaskCreate((TaskFunction_t) Device_Task1,                                   //函数地址
@@ -756,7 +762,7 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_QueueTask1Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入 */
-    xTaskCreate((TaskFunction_t) Device_SemaphoreTask1,                                   //函数地址
+    /*xTaskCreate((TaskFunction_t) Device_SemaphoreTask1,                                   //函数地址
                 (const char * const) "Device_QueueTask1",                             //函数名
                 (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
                 (void * const) NULL,                                            //携带参数
@@ -774,8 +780,39 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_SemaphoreTask3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
-  
-  
+    xTaskCreate((TaskFunction_t) Device_SemaphoreTask4, 
+                (const char * const) "Device_SemaphoreTask4", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_SemaphoreTask4Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+  */
+    
+    //优先级反转
+    
+    g_nSemaphorePriorityHandle = xSemaphoreCreateBinary();
+    
+    xTaskCreate((TaskFunction_t) Device_SemaphoreTaskHigh,                                   //函数地址
+                (const char * const) "Device_SemaphoreTaskHigh",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 4,                                                //优先级
+                (TaskHandle_t *) &Device_SemaphoreTaskHighHandle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_SemaphoreTaskMid, 
+                (const char * const) "Device_SemaphoreTaskMid", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_SemaphoreTaskMidHandle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_SemaphoreTaskLow, 
+                (const char * const) "Device_SemaphoreTaskLow", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 2, 
+                (TaskHandle_t *) &Device_SemaphoreTaskLowHandle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+    xSemaphoreGive(g_nSemaphorePriorityHandle);
+    //
+    //vTaskPrioritySet(Device_SemaphoreTask1Handle, 1 + uxTaskPriorityGet(Device_SemaphoreTask3Handle));
 #endif	
 	
 #if configSUPPORT_STATIC_ALLOCATION
@@ -802,7 +839,7 @@ void Device_TaskCreat()
 						  (StaticTask_t * const) &Device_TcbTask3);
 #endif
 	vTaskDelete(NULL);
-	//portEXIT_CRITICAL();				//退出临界区
+	portEXIT_CRITICAL();				//退出临界区
 }
 
 void Device_Task1()
@@ -928,27 +965,27 @@ void Device_Task3()
 //空闲任务内存分配
 
 #if configSUPPORT_STATIC_ALLOCATION
-StaticTask_t Device_TcbIdleTask; 
-StackType_t Device_StackIdleTask[configMINIMAL_STACK_SIZE];
-void vApplicationGetIdleTaskMemory(StaticTask_t ** ppxIdleTaskTCBBuffer,
-								   StackType_t ** ppxIdleTaskStackBuffer,
-								   uint32_t * pulIdleTaskStackSize )
-{
-	*ppxIdleTaskTCBBuffer = &Device_TcbIdleTask; 					//	空闲任务数据块
-	*ppxIdleTaskStackBuffer = Device_StackIdleTask;					//空闲任务堆栈地址
-	* pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;				//空闲任务堆栈大小
-}
+    StaticTask_t Device_TcbIdleTask; 
+    StackType_t Device_StackIdleTask[configMINIMAL_STACK_SIZE];
+    void vApplicationGetIdleTaskMemory(StaticTask_t ** ppxIdleTaskTCBBuffer,
+                                       StackType_t ** ppxIdleTaskStackBuffer,
+                                       uint32_t * pulIdleTaskStackSize )
+    {
+        *ppxIdleTaskTCBBuffer = &Device_TcbIdleTask; 					//	空闲任务数据块
+        *ppxIdleTaskStackBuffer = Device_StackIdleTask;					//空闲任务堆栈地址
+        * pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;				//空闲任务堆栈大小
+    }
 
-StaticTask_t Device_TcbTimeTask; 
-StackType_t Device_StackTimeTask[configMINIMAL_STACK_SIZE];
-void vApplicationGetTimerTaskMemory(StaticTask_t ** ppxTimerTaskTCBBuffer,
-								    StackType_t ** ppxTimerTaskStackBuffer,
-								    uint32_t * pulTimerTaskStackSize)
-{
-	*ppxTimerTaskTCBBuffer = &Device_TcbTimeTask;
-	*ppxTimerTaskStackBuffer = Device_StackTimeTask;
-	*pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
-}
+    StaticTask_t Device_TcbTimeTask; 
+    StackType_t Device_StackTimeTask[configMINIMAL_STACK_SIZE];
+    void vApplicationGetTimerTaskMemory(StaticTask_t ** ppxTimerTaskTCBBuffer,
+                                        StackType_t ** ppxTimerTaskStackBuffer,
+                                        uint32_t * pulTimerTaskStackSize)
+    {
+        *ppxTimerTaskTCBBuffer = &Device_TcbTimeTask;
+        *ppxTimerTaskStackBuffer = Device_StackTimeTask;
+        *pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
+    }
 #endif
 
 
@@ -996,9 +1033,9 @@ void vApplicationGetTimerTaskMemory(StaticTask_t ** ppxTimerTaskTCBBuffer,
  
     if((key_Queue != NULL) && (big_DateQuene != NULL))
     {
-   
-   
+      
     }
+
  }
     
     
@@ -1045,20 +1082,50 @@ void Device_QueueTask3()
 TaskHandle_t Device_SemaphoreTask1Handle;
 TaskHandle_t Device_SemaphoreTask2Handle;
 TaskHandle_t Device_SemaphoreTask3Handle;
-
+TaskHandle_t Device_SemaphoreTask4Handle;
 
 void Device_SemaphoreTask1()
 { 
-
+const TickType_t delayTime = pdMS_TO_TICKS( 100UL ); 
   while(1)
   {
-    if(g_nKeyValue & 0x01)
+    if(R485_RcvOver())
     {
-        if(xSemaphoreGive(g_nSemaphoreHandle) == pdFALSE)
+        if(g_sR485RcvFrame.buffer[0] == 0x01)
+        {
+            if(xSemaphoreGive(g_nSemaphoreHandle) == pdFALSE)
+            {
+                    printf("Give semaphpre err!!!\r\n");
+            }
+            else
+            {
+              printf("Give semaphpre OK!!!, Curr Task Priority Low\r\n");
+            }
+        }
+        else if(g_sR485RcvFrame.buffer[0] == 0x02)
+        {
+            if(xSemaphoreGive(g_nSemaphoreCountHandle) == pdFALSE)
+            {
+                printf("countsemaphoreNum = %d, semaphore count add ERR!!!!!\r\n", 
+                    uxSemaphoreGetCount(g_nSemaphoreCountHandle));
+            }
+            else
+            {
+              
+                printf("countsemaphoreNum = %d, semaphore count add!!!!!\r\n", 
+                           uxSemaphoreGetCount(g_nSemaphoreCountHandle));
+              
+            }
+        
+        
+        }
+        R485_RcvIdle();
+        R485_EnableRxDma();
+    }   
+    else
     {
-            printf("Give semaphpre err!!!");
+        vTaskDelay(delayTime);
     }
-  }
   }
 
 
@@ -1066,14 +1133,16 @@ void Device_SemaphoreTask1()
 
 void Device_SemaphoreTask2()
 {  
+  const TickType_t delayTime = pdMS_TO_TICKS( 5000 ); 
   while(1)
   {
-        if(xSemaphoreTake(g_nSemaphoreHandle, portMAX_DELAY) == pdTRUE)      //堵塞,死等
+        if(xSemaphoreTake(g_nSemaphoreHandle, delayTime/*portMAX_DELAY*/) == pdTRUE)      //堵塞,死等
         {
-            printf("Take Semaphore OK");
+            printf("Take Semaphore OK, Curr Task Priority High\r\n");
         }
-        else{
-        printf("Take Semaphore ERR");
+        else
+        {
+            printf("Take Semaphore ERR\r\n");
         }
   }
 
@@ -1084,9 +1153,76 @@ void Device_SemaphoreTask3()
 {  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
   while(1)
   {
+        if(xSemaphoreTake(g_nSemaphoreCountHandle, delayTime/*portMAX_DELAY*/) == pdTRUE)      //堵塞,死等
+        {
+            printf("CountSemapHoreNum : %d, Take Semaphore count OK, Curr Task Priority High\r\n", uxSemaphoreGetCount(g_nSemaphoreCountHandle));
+        }
+        else
+        {
+            printf("Take Semaphore Count ERR\r\n");
+        }
+        vTaskDelay(delayTime);
+  }
+}
+
+void Device_SemaphoreTask4()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 2000UL ); 
+  while(1)
+  {
+        vTaskDelay(delayTime);
+  }
+}
+
+
+
+
+
+
+
+//优先级翻转
+
+TaskHandle_t Device_SemaphoreTaskHighHandle;
+TaskHandle_t Device_SemaphoreTaskMidHandle;
+TaskHandle_t Device_SemaphoreTaskLowHandle;
+
+void Device_SemaphoreTaskHigh()
+{     const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  while(1)
+  {
+        printf("HighPeiorityTask Runing : Semahore Take !!!!!!\r\n");
+        xSemaphoreTake(g_nSemaphorePriorityHandle, portMAX_DELAY);
+        Device_Delayms(1000);
+        printf("HighPeiorityTask Runing : Semahore Give !!!!!!\r\n");
+        xSemaphoreGive(g_nSemaphorePriorityHandle);
         vTaskDelay(delayTime);
   }
 
 
 }
+
+void Device_SemaphoreTaskMid()
+{  
+    const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+    while(1)
+    {
+        printf("MidPeiorityTask Runing : !!!!!!\r\n");
+        vTaskDelay(delayTime);
+    }
+
+
+}
+
+void Device_SemaphoreTaskLow()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+    while(1)
+    {
+        printf("LowPeiorityTask Runing : Semahore Take !!!!!!\r\n");
+        xSemaphoreTake(g_nSemaphorePriorityHandle, portMAX_DELAY);
+        Device_Delayms(3000);
+        printf("LowPeiorityTask Runing : Semahore Give !!!!!!\r\n");
+        xSemaphoreGive(g_nSemaphorePriorityHandle);
+        vTaskDelay(delayTime);
+    }
+}
+
 //--

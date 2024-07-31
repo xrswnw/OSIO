@@ -180,8 +180,21 @@ void Device_TaskCreat();
 extern TaskHandle_t Device_SemaphoreTask1Handle;
 extern TaskHandle_t Device_SemaphoreTask2Handle;
 extern TaskHandle_t Device_SemaphoreTask3Handle;
-
+extern TaskHandle_t Device_SemaphoreTask4Handle;
 void Device_SemaphoreTask1();
 void Device_SemaphoreTask2();
 void Device_SemaphoreTask3();
+void Device_SemaphoreTask4();
+
+
+//优先级翻转
+
+
+void Device_SemaphoreTaskLow();
+void Device_SemaphoreTaskMid();
+extern TaskHandle_t Device_SemaphoreTaskHighHandle;
+extern TaskHandle_t Device_SemaphoreTaskMidHandle;
+extern TaskHandle_t Device_SemaphoreTaskLowHandle;
+
+void Device_SemaphoreTaskHigh();
 #endif
