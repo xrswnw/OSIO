@@ -789,7 +789,7 @@ void Device_TaskCreat()
   */
     
     //优先级反转
-    
+    /*
     g_nSemaphorePriorityHandle = xSemaphoreCreateBinary();
     
     xTaskCreate((TaskFunction_t) Device_SemaphoreTaskHigh,                                   //函数地址
@@ -811,6 +811,28 @@ void Device_TaskCreat()
                 (UBaseType_t) 2, 
                 (TaskHandle_t *) &Device_SemaphoreTaskLowHandle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
     xSemaphoreGive(g_nSemaphorePriorityHandle);
+
+*/
+
+
+    xTaskCreate((TaskFunction_t) Device_QueueCreatTask,                                   //函数地址
+                (const char * const) "Device_QueueCreatTask",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 4,                                                //优先级
+                (TaskHandle_t *) &Device_QueueCreatTaskHandle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_QueueGiveTask, 
+                (const char * const) "Device_QueueGiveTask", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_QueueGiveTaskHandle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_QueueTakeTask, 
+                (const char * const) "Device_QueueTakeTask", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_QueueTakeTaskHandle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
     //
     //vTaskPrioritySet(Device_SemaphoreTask1Handle, 1 + uxTaskPriorityGet(Device_SemaphoreTask3Handle));
 #endif	
@@ -1224,5 +1246,154 @@ void Device_SemaphoreTaskLow()
         vTaskDelay(delayTime);
     }
 }
+
+
+
+//队列集合集
+
+TaskHandle_t Device_QueueCreatTaskHandle;
+TaskHandle_t Device_QueueGiveTaskHandle;
+TaskHandle_t Device_QueueTakeTaskHandle;
+
+QueueHandle_t g_nQueneNormal = NULL;
+QueueHandle_t g_nQueneSemaphore = NULL;
+QueueSetHandle_t g_nQueueSet = NULL;
+void Device_QueueCreatTask()
+{
+  while(1)
+  {
+		g_nQueneNormal = xQueueCreate(10, 4);
+		g_nQueneSemaphore = xSemaphoreCreateBinary();
+		if((g_nQueneNormal != NULL) && (g_nQueneSemaphore != NULL))
+		{
+		  	g_nQueueSet = xQueueCreateSet(3);
+			if(g_nQueueSet != NULL)
+			{
+				if(xQueueAddToSet(g_nQueneNormal, g_nQueueSet) && xQueueAddToSet(g_nQueneSemaphore, g_nQueueSet))
+				{
+					vTaskDelete(NULL);
+				}
+			}
+			
+		}
+  }
+}
+
+void Device_QueueGiveTask()
+{  
+  	u8 tick = 0;
+    const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+    while(1)
+    {
+	  	if((tick % 2) == 0)
+		{
+			if(xQueueSend(g_nQueneNormal, (const void * const)&g_nSysTick, portMAX_DELAY) == pdPASS)
+			{
+				printf("Normal quene add item OK\r\n");
+			}
+			else
+			{
+				printf("Normal quene add item ERR\r\n");
+			}
+		}
+		else if((tick % 3) == 0)
+		{
+			if(xSemaphoreGive(g_nQueneSemaphore) == pdPASS)
+			{
+				printf("Semaphore give OK\r\n");
+			}
+			else
+			{
+				printf("Semaphore give ERR\r\n");
+			}
+		}
+		tick ++;
+        vTaskDelay(delayTime);
+    }
+
+
+}
+
+void Device_QueueTakeTask()
+{  
+  	const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+	QueueSetMemberHandle_t queueSetHandle = NULL;
+	void * const pParms = NULL;
+    while(1)
+    {
+	  	queueSetHandle = xQueueSelectFromSet(g_nQueueSet,  portMAX_DELAY);
+		if(queueSetHandle == g_nQueneNormal)
+		{
+			if(xQueueReceive(g_nQueneNormal, pParms, 1000) == pdTRUE)
+			{
+				printf("get quene itme is %8X", (u32 *)(pParms));
+			}
+			else
+			{
+				printf("get quene itme is ERR");
+			}
+		}
+		else if(queueSetHandle == g_nQueneSemaphore)
+		{
+			if(xSemaphoreTake(g_nQueneSemaphore, 1000))
+			{
+				printf("semaphore quene itme is OK");
+			}
+			else
+			{
+				printf("semaphore quene itme is ERR");
+			}
+			
+		}
+		else
+		{
+			printf("QueneSet ERR  \r\n");	
+		}
+        vTaskDelay(delayTime);
+    }
+}
+
+
+
+//event_group
+EventGroupHandle_t g_nEventGroup = NULL;
+
+#define DEVICE_FLAG_DELAY_1000MS_OK			0x00000001
+#define DEVICE_FLAG_DELAY_500MS_OK			0x00000002
+
+void Device_EventGroupCreatTask()
+{
+	while(1)
+	{
+		g_nEventGroup = xEventGroupCreate();
+		
+		if(g_nEventGroup != NULL)
+		{
+			vTaskDelete(NULL);
+		}
+	}
+}
+
+void Device_EventGroupTest1Task()
+{
+	const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+	while(1)
+	{
+	  if(xEventGroupWaitBits(g_nEventGroup, DEVICE_FLAG_DELAY_1000MS_OK, pdFALSE, pdFALSE, portMAX_DELAY))
+	  {
+	  		xEventGroupSetBits(g_nEventGroup, DEVICE_FLAG_DELAY_1000MS_OK);
+	  }
+		vTaskDelay(delayTime);
+	}
+}
+
+void Device_EventGroupTest2Task()
+{
+	while(1)
+	{
+	
+	}
+}
+
 
 //--

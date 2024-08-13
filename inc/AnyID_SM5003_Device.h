@@ -195,6 +195,15 @@ void Device_SemaphoreTaskMid();
 extern TaskHandle_t Device_SemaphoreTaskHighHandle;
 extern TaskHandle_t Device_SemaphoreTaskMidHandle;
 extern TaskHandle_t Device_SemaphoreTaskLowHandle;
-
 void Device_SemaphoreTaskHigh();
+
+//队列集测试
+extern TaskHandle_t Device_QueueCreatTaskHandle;
+extern TaskHandle_t Device_QueueGiveTaskHandle;
+extern TaskHandle_t Device_QueueTakeTaskHandle;
+
+void Device_QueueTakeTask();
+void Device_QueueGiveTask();
+void Device_QueueCreatTask();
+
 #endif

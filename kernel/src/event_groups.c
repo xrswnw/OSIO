@@ -191,10 +191,10 @@ static BaseType_t prvTestWaitCondition( const EventBits_t uxCurrentEventBits,
 #endif /* configSUPPORT_DYNAMIC_ALLOCATION */
 /*-----------------------------------------------------------*/
 
-EventBits_t xEventGroupSync( EventGroupHandle_t xEventGroup,
-                             const EventBits_t uxBitsToSet,
-                             const EventBits_t uxBitsToWaitFor,
-                             TickType_t xTicksToWait )
+EventBits_t xEventGroupSync( EventGroupHandle_t xEventGroup,			//同步时间组
+                             const EventBits_t uxBitsToSet,				//标志位设定值
+                             const EventBits_t uxBitsToWaitFor,			//标志位等待值 
+                             TickType_t xTicksToWait )					//堵塞时间
 {
     EventBits_t uxOriginalBitValue, uxReturn;
     EventGroup_t * pxEventBits = xEventGroup;
@@ -314,11 +314,11 @@ EventBits_t xEventGroupSync( EventGroupHandle_t xEventGroup,
 }
 /*-----------------------------------------------------------*/
 
-EventBits_t xEventGroupWaitBits( EventGroupHandle_t xEventGroup,
-                                 const EventBits_t uxBitsToWaitFor,
-                                 const BaseType_t xClearOnExit,
-                                 const BaseType_t xWaitForAllBits,
-                                 TickType_t xTicksToWait )
+EventBits_t xEventGroupWaitBits( EventGroupHandle_t xEventGroup,				//事件标志组
+                                 const EventBits_t uxBitsToWaitFor,				//等待标志位
+                                 const BaseType_t xClearOnExit,					//是否清除标志位
+                                 const BaseType_t xWaitForAllBits,				//与或确立
+                                 TickType_t xTicksToWait )						//等待时间
 {
     EventGroup_t * pxEventBits = xEventGroup;
     EventBits_t uxReturn, uxControlBits = 0;

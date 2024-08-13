@@ -27,6 +27,7 @@
 	#include "task.h"
 	#include "queue.h"
     #include "semphr.h"
+	#include "event_groups.h"
 #endif
 
 //优先级分组是2:2

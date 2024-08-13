@@ -2929,7 +2929,7 @@ BaseType_t xQueueIsQueueFullFromISR( const QueueHandle_t xQueue )
 
 #endif /* configUSE_QUEUE_SETS */
 /*-----------------------------------------------------------*/
-
+//队列添加至队列集前，队列需无有效数据
 #if ( configUSE_QUEUE_SETS == 1 )
 
     BaseType_t xQueueAddToSet( QueueSetMemberHandle_t xQueueOrSemaphore,
@@ -3002,7 +3002,7 @@ BaseType_t xQueueIsQueueFullFromISR( const QueueHandle_t xQueue )
 /*-----------------------------------------------------------*/
 
 #if ( configUSE_QUEUE_SETS == 1 )
-
+//队列集有效获取
     QueueSetMemberHandle_t xQueueSelectFromSet( QueueSetHandle_t xQueueSet,
                                                 TickType_t const xTicksToWait )
     {
