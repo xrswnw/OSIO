@@ -814,7 +814,7 @@ void Device_TaskCreat()
 
 */
 
-
+/*
     xTaskCreate((TaskFunction_t) Device_QueueCreatTask,                                   //函数地址
                 (const char * const) "Device_QueueCreatTask",                             //函数名
                 (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
@@ -833,7 +833,26 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_QueueTakeTaskHandle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
-    //
+  */  //
+  
+        xTaskCreate((TaskFunction_t) Device_TaskNoticeTask1,                                   //函数地址
+                (const char * const) "Device_TaskNoticeTask1",                             //函数名
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
+                (void * const) NULL,                                            //携带参数
+                (UBaseType_t) 2,                                                //优先级
+                (TaskHandle_t *) &Device_TaskNoticeTask1Handle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_TaskNoticeTask2, 
+                (const char * const) "Device_TaskNoticeTask2", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 3, 
+                (TaskHandle_t *) &Device_TaskNoticeTask2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
+	xTaskCreate((TaskFunction_t) Device_TaskNoticeTask3, 
+                (const char * const) "Device_TaskNoticeTask3", 
+                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
+                (void * const) NULL, 
+                (UBaseType_t) 4, 
+                (TaskHandle_t *) &Device_TaskNoticeTask3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
     //vTaskPrioritySet(Device_SemaphoreTask1Handle, 1 + uxTaskPriorityGet(Device_SemaphoreTask3Handle));
 #endif	
 	
@@ -1394,6 +1413,70 @@ void Device_EventGroupTest2Task()
 	
 	}
 }
+
+/////task Notice
+
+TaskHandle_t Device_TaskNoticeTask1Handle;
+TaskHandle_t Device_TaskNoticeTask2Handle;
+TaskHandle_t Device_TaskNoticeTask3Handle;
+
+
+void Device_TaskNoticeTask1()
+{
+    while(1)
+    {
+        if(R485_RcvOver())
+        {
+          
+            xTaskNotifyGive(Device_TaskNoticeTask2Handle);
+            xTaskNotify(Device_TaskNoticeTask3Handle, 
+                        g_sR485RcvFrame.buffer[0], eSetValueWithOverwrite);
+            R485_RcvIdle();
+            R485_EnableRxDma();
+        }
+    }
+}
+
+void Device_TaskNoticeTask2()
+{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+    uint32_t num = 0;
+    while(1)
+    {
+        num = ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
+        if(num)
+        {
+          printf("Task Take Ok, Num : %d", num);
+        }
+        vTaskDelay(delayTime);
+    }
+
+
+}
+
+void Device_TaskNoticeTask3()
+{  
+  	const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+    u32 notice = 0;
+    while(1)
+    {
+      
+        if(xTaskNotifyWait(0, 0xFFFFFFFF, &notice, portMAX_DELAY) == pdTRUE)
+        {
+            switch(notice)
+            {
+                case 0x01:
+                    printf("notice : %d", notice);
+                break;
+                case 0x02:
+                    printf("notice : %d", notice);
+                break;
+            }
+        
+        }
+        vTaskDelay(delayTime);
+    }
+}
+
 
 
 //--

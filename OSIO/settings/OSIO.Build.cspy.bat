@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyId\Git\SoftWare\OSIO-main\OSIO\settings\OSIO.Build.general.xcl" --backend -f "E:\AnyId\Git\SoftWare\OSIO-main\OSIO\settings\OSIO.Build.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\HFReader\Git\OSIO\OSIO\settings\OSIO.Build.general.xcl" --backend -f "E:\AnyID\HFReader\Git\OSIO\OSIO\settings\OSIO.Build.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyId\Git\SoftWare\OSIO-main\OSIO\settings\OSIO.Build.general.xcl" "--debug_file=%~1" --backend -f "E:\AnyId\Git\SoftWare\OSIO-main\OSIO\settings\OSIO.Build.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\AnyID\HFReader\Git\OSIO\OSIO\settings\OSIO.Build.general.xcl" "--debug_file=%~1" --backend -f "E:\AnyID\HFReader\Git\OSIO\OSIO\settings\OSIO.Build.driver.xcl" 
 
 @echo off 
 :end

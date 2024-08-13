@@ -107,10 +107,10 @@ typedef enum
 typedef enum
 {
     eNoAction = 0,            /* Notify the task without updating its notify value. */
-    eSetBits,                 /* Set bits in the task's notification value. */
-    eIncrement,               /* Increment the task's notification value. */
-    eSetValueWithOverwrite,   /* Set the task's notification value to a specific value even if the previous value has not yet been read by the task. */
-    eSetValueWithoutOverwrite /* Set the task's notification value if the previous value has been read by the task. */
+    eSetBits,                 /* Set bits in the task's notification value. */          // 更新指定位
+    eIncrement,               /* Increment the task's notification value. */            //通知值加加
+    eSetValueWithOverwrite,   /* Set the task's notification value to a specific value even if the previous value has not yet been read by the task. */   //覆写更新值
+    eSetValueWithoutOverwrite /* Set the task's notification value if the previous value has been read by the task. */                                      //不覆写更新值
 } eNotifyAction;
 
 /*

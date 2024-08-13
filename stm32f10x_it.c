@@ -200,6 +200,8 @@ void R485_IRQHandler(void)
         R485_DisableRxDma();
         g_sR485RcvFrame.len = R485_GetRxLen(); 
         g_sR485RcvFrame.state = UART_STAT_RX_END;    //接收数据完成
+        
+        
     }
 
     g_nR485Sr = R485_PORT->SR;  //通过读取SR和DR清空中断标志
