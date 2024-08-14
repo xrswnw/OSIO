@@ -1429,8 +1429,19 @@ void Device_TaskNoticeTask1()
         {
           
             xTaskNotifyGive(Device_TaskNoticeTask2Handle);
-            xTaskNotify(Device_TaskNoticeTask3Handle, 
-                        g_sR485RcvFrame.buffer[0], eSetValueWithOverwrite);
+            /*xTaskNotify(Device_TaskNoticeTask3Handle, 
+            g_sR485RcvFrame.buffer[0], eSetValueWithOverwrite);*/
+            
+            if(g_sR485RcvFrame.buffer[0] == 0x10)
+            {
+                xTaskNotify(Device_TaskNoticeTask3Handle, 
+                0x00000001, eSetBits);
+            }
+            else if(g_sR485RcvFrame.buffer[0] == 0x11)
+            {
+                xTaskNotify(Device_TaskNoticeTask3Handle, 
+                0x00000002, eSetBits);
+            }
             R485_RcvIdle();
             R485_EnableRxDma();
         }
@@ -1455,11 +1466,11 @@ void Device_TaskNoticeTask2()
 
 void Device_TaskNoticeTask3()
 {  
-  	const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
+  	//const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
     u32 notice = 0;
     while(1)
     {
-      
+        /*
         if(xTaskNotifyWait(0, 0xFFFFFFFF, &notice, portMAX_DELAY) == pdTRUE)
         {
             switch(notice)
@@ -1473,7 +1484,22 @@ void Device_TaskNoticeTask3()
             }
         
         }
-        vTaskDelay(delayTime);
+    */
+      
+        if(xTaskNotifyWait(0, 0xFFFFFFFF, &notice, portMAX_DELAY) == pdTRUE)
+        {
+            switch(notice)
+            {
+                case 0x00000001:
+                    printf("notice : %d", notice);
+                break;
+                case 0x00000002:
+                    printf("notice : %d", notice);
+                break;
+            }
+        
+        }
+      //  vTaskDelay(delayTime);
     }
 }
 

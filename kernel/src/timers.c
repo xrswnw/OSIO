@@ -286,7 +286,7 @@
     #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 
         TimerHandle_t xTimerCreate( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-                                    const TickType_t xTimerPeriodInTicks,
+                                    const TickType_t xTimerPeriodInTicks,               //系统始终节拍
                                     const BaseType_t xAutoReload,
                                     void * const pvTimerID,
                                     TimerCallbackFunction_t pxCallbackFunction )

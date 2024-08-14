@@ -96,9 +96,9 @@ errata. */
 
 
 /* Software timer definitions. */
-#define configUSE_TIMERS				1											//静态任务创建需要定时器任务
-#define configTIMER_TASK_PRIORITY		( 2 )
-#define configTIMER_QUEUE_LENGTH		5
+#define configUSE_TIMERS				1											//静态任务创建需要定时器任务,使用软件定时器
+#define configTIMER_TASK_PRIORITY		( 31 )                                      //软件定时器任务优先级
+#define configTIMER_QUEUE_LENGTH		5                                           //定时器命令队列长度
 #define configTIMER_TASK_STACK_DEPTH	( configMINIMAL_STACK_SIZE * 2 )
 #define configUSE_DAEMON_TASK_STARTUP_HOOK      0                                   //定时器首次任务时回调。1:启用，需编写回调函数；0:不启用 
 /* Set the following definitions to 1 to include the API function, or zero
