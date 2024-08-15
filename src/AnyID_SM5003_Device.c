@@ -703,6 +703,11 @@ QueueHandle_t g_nSemaphoreHandle = 0;       //二进制信号量
 QueueHandle_t g_nMutesSemaphoreHandle = 0;       //互斥二进制信号量
 QueueHandle_t g_nSemaphorePriorityHandle = 0;       //二进制信号量，，优先级翻转测试
 QueueHandle_t g_nSemaphoreCountHandle = 0;       //二进制信号量
+
+
+
+TimerHandle_t g_nTimDisposableTaskHandle = 0;
+TimerHandle_t g_nTimRepatTaskHandle = 0;
 void Device_TaskCreat() 
 {
 	portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
@@ -853,6 +858,18 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_TaskNoticeTask3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
+
+    g_nTimDisposableTaskHandle = xTimerCreate( (const char * const)"Tim1", /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+                                    1000,            
+                                    pdFALSE,
+                                    (void * const)1,
+                                    Device_Tim1CallBackTask);
+    
+    g_nTimRepatTaskHandle = xTimerCreate( (const char * const)"Tim2", /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+                                    500,            
+                                    pdTRUE,
+                                    (void * const)2,
+                                    Device_Tim2CallBackTask);
     //vTaskPrioritySet(Device_SemaphoreTask1Handle, 1 + uxTaskPriorityGet(Device_SemaphoreTask3Handle));
 #endif	
 	
@@ -1491,9 +1508,13 @@ void Device_TaskNoticeTask3()
             switch(notice)
             {
                 case 0x00000001:
+                    xTimerStart(g_nTimDisposableTaskHandle, portMAX_DELAY);
+                    xTimerStart(g_nTimRepatTaskHandle, portMAX_DELAY);
                     printf("notice : %d", notice);
                 break;
                 case 0x00000002:
+                    xTimerStop(g_nTimDisposableTaskHandle, portMAX_DELAY);
+                    xTimerStop(g_nTimRepatTaskHandle, portMAX_DELAY);
                     printf("notice : %d", notice);
                 break;
             }
@@ -1503,6 +1524,22 @@ void Device_TaskNoticeTask3()
     }
 }
 
+void Device_Tim1CallBackTask( TimerHandle_t pxTimer )
+{
+    static u32 time = 0;
+    
+    time++;
+    printf("Tim1Task Run Tick : %d", time);
+}
 
+void Device_Tim2CallBackTask( TimerHandle_t pxTimer )
+{
+    static u32 time = 0;
+    
+    time++;
+    printf("Tim2Task Run Tick : %d", time);
+    xTaskNotifyGive(Device_TaskNoticeTask2Handle);
+
+}
 
 //--

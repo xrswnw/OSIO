@@ -74,6 +74,7 @@ errata. */
 #define configUSE_16_BIT_TICKS					0                                   //滴答定时器范围。1 ：u16; 0 : u32，同时定义事件标志组宽度
 #define configTICK_TYPE_WIDTH_IN_BITS           TICK_TYPE_WIDTH_32_BITS             //滴答“s”执行的次数。32位
 #define configUSE_TICKLESS_IDLE                 0                                   //低功耗模式
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   8                                   //进入相应低功耗的最短时长
 #define configUSE_MUTEXES						1                                   //允许互斥信号量
 #define configQUEUE_REGISTRY_SIZE				8
 //#define configCHECK_FOR_STACK_OVERFLOW			2
@@ -97,9 +98,9 @@ errata. */
 
 /* Software timer definitions. */
 #define configUSE_TIMERS				1											//静态任务创建需要定时器任务,使用软件定时器
-#define configTIMER_TASK_PRIORITY		( 31 )                                      //软件定时器任务优先级
+#define configTIMER_TASK_PRIORITY		( configMAX_PRIORITIES - 1 )                //软件定时器任务优先级
 #define configTIMER_QUEUE_LENGTH		5                                           //定时器命令队列长度
-#define configTIMER_TASK_STACK_DEPTH	( configMINIMAL_STACK_SIZE * 2 )
+#define configTIMER_TASK_STACK_DEPTH	( configMINIMAL_STACK_SIZE * 2 )           //定时器任务堆栈     
 #define configUSE_DAEMON_TASK_STARTUP_HOOK      0                                   //定时器首次任务时回调。1:启用，需编写回调函数；0:不启用 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */

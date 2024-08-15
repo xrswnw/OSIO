@@ -216,5 +216,6 @@ extern TaskHandle_t Device_TaskNoticeTask3Handle;
 void Device_TaskNoticeTask1();
 void Device_TaskNoticeTask2();
 void Device_TaskNoticeTask3();
-
+void Device_Tim1CallBackTask( TimerHandle_t pxTimer );
+  void Device_Tim2CallBackTask( TimerHandle_t pxTimer );
 #endif
