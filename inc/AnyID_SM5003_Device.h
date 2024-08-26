@@ -206,16 +206,4 @@ void Device_QueueTakeTask();
 void Device_QueueGiveTask();
 void Device_QueueCreatTask();
 
-
-//
-
-
-extern TaskHandle_t Device_TaskNoticeTask1Handle;
-extern TaskHandle_t Device_TaskNoticeTask2Handle;
-extern TaskHandle_t Device_TaskNoticeTask3Handle;
-void Device_TaskNoticeTask1();
-void Device_TaskNoticeTask2();
-void Device_TaskNoticeTask3();
-void Device_Tim1CallBackTask( TimerHandle_t pxTimer );
-  void Device_Tim2CallBackTask( TimerHandle_t pxTimer );
 #endif

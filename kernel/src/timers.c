@@ -286,7 +286,7 @@
     #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 
         TimerHandle_t xTimerCreate( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-                                    const TickType_t xTimerPeriodInTicks,               //系统始终节拍
+                                    const TickType_t xTimerPeriodInTicks,
                                     const BaseType_t xAutoReload,
                                     void * const pvTimerID,
                                     TimerCallbackFunction_t pxCallbackFunction )
@@ -564,7 +564,7 @@
         pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
     }
 /*-----------------------------------------------------------*/
-//软件定时器任务
+
     static portTASK_FUNCTION( prvTimerTask, pvParameters )
     {
         TickType_t xNextExpireTime;
@@ -589,7 +589,7 @@
         {
             /* Query the timers list to see if it contains any timers, and if so,
              * obtain the time at which the next timer will expire. */
-            xNextExpireTime = prvGetNextExpireTime( &xListWasEmpty );           //获取下一个预超时定时器        
+            xNextExpireTime = prvGetNextExpireTime( &xListWasEmpty );
 
             /* If a timer has expired, process it.  Otherwise, block this task
              * until either a timer does expire, or a command is received. */

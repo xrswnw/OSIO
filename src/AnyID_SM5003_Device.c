@@ -703,11 +703,6 @@ QueueHandle_t g_nSemaphoreHandle = 0;       //二进制信号量
 QueueHandle_t g_nMutesSemaphoreHandle = 0;       //互斥二进制信号量
 QueueHandle_t g_nSemaphorePriorityHandle = 0;       //二进制信号量，，优先级翻转测试
 QueueHandle_t g_nSemaphoreCountHandle = 0;       //二进制信号量
-
-
-
-TimerHandle_t g_nTimDisposableTaskHandle = 0;
-TimerHandle_t g_nTimRepatTaskHandle = 0;
 void Device_TaskCreat() 
 {
 	portENTER_CRITICAL();				//进入临界区，关闭中断，停止调度器
@@ -819,7 +814,7 @@ void Device_TaskCreat()
 
 */
 
-/*
+
     xTaskCreate((TaskFunction_t) Device_QueueCreatTask,                                   //函数地址
                 (const char * const) "Device_QueueCreatTask",                             //函数名
                 (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
@@ -838,38 +833,7 @@ void Device_TaskCreat()
                 (void * const) NULL, 
                 (UBaseType_t) 4, 
                 (TaskHandle_t *) &Device_QueueTakeTaskHandle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
-  */  //
-  
-        xTaskCreate((TaskFunction_t) Device_TaskNoticeTask1,                                   //函数地址
-                (const char * const) "Device_TaskNoticeTask1",                             //函数名
-                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE,        //堆栈长度 
-                (void * const) NULL,                                            //携带参数
-                (UBaseType_t) 2,                                                //优先级
-                (TaskHandle_t *) &Device_TaskNoticeTask1Handle);		                    //句柄                           //Device_Task1抢占Device_TaskCreat(),堵塞后再次进入
-	xTaskCreate((TaskFunction_t) Device_TaskNoticeTask2, 
-                (const char * const) "Device_TaskNoticeTask2", 
-                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
-                (void * const) NULL, 
-                (UBaseType_t) 3, 
-                (TaskHandle_t *) &Device_TaskNoticeTask2Handle);    	//Device_Task2抢占Device_TaskCreat(),堵塞后再次进入
-	xTaskCreate((TaskFunction_t) Device_TaskNoticeTask3, 
-                (const char * const) "Device_TaskNoticeTask3", 
-                (const configSTACK_DEPTH_TYPE) configMINIMAL_STACK_SIZE, 
-                (void * const) NULL, 
-                (UBaseType_t) 4, 
-                (TaskHandle_t *) &Device_TaskNoticeTask3Handle);		//Device_Task3抢占Device_TaskCreat(),堵塞后再次进入
-
-    g_nTimDisposableTaskHandle = xTimerCreate( (const char * const)"Tim1", /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-                                    1000,            
-                                    pdFALSE,
-                                    (void * const)1,
-                                    Device_Tim1CallBackTask);
-    
-    g_nTimRepatTaskHandle = xTimerCreate( (const char * const)"Tim2", /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-                                    500,            
-                                    pdTRUE,
-                                    (void * const)2,
-                                    Device_Tim2CallBackTask);
+    //
     //vTaskPrioritySet(Device_SemaphoreTask1Handle, 1 + uxTaskPriorityGet(Device_SemaphoreTask3Handle));
 #endif	
 	
@@ -1431,115 +1395,5 @@ void Device_EventGroupTest2Task()
 	}
 }
 
-/////task Notice
-
-TaskHandle_t Device_TaskNoticeTask1Handle;
-TaskHandle_t Device_TaskNoticeTask2Handle;
-TaskHandle_t Device_TaskNoticeTask3Handle;
-
-
-void Device_TaskNoticeTask1()
-{
-    while(1)
-    {
-        if(R485_RcvOver())
-        {
-          
-            xTaskNotifyGive(Device_TaskNoticeTask2Handle);
-            /*xTaskNotify(Device_TaskNoticeTask3Handle, 
-            g_sR485RcvFrame.buffer[0], eSetValueWithOverwrite);*/
-            
-            if(g_sR485RcvFrame.buffer[0] == 0x10)
-            {
-                xTaskNotify(Device_TaskNoticeTask3Handle, 
-                0x00000001, eSetBits);
-            }
-            else if(g_sR485RcvFrame.buffer[0] == 0x11)
-            {
-                xTaskNotify(Device_TaskNoticeTask3Handle, 
-                0x00000002, eSetBits);
-            }
-            R485_RcvIdle();
-            R485_EnableRxDma();
-        }
-    }
-}
-
-void Device_TaskNoticeTask2()
-{  const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
-    uint32_t num = 0;
-    while(1)
-    {
-        num = ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
-        if(num)
-        {
-          printf("Task Take Ok, Num : %d", num);
-        }
-        vTaskDelay(delayTime);
-    }
-
-
-}
-
-void Device_TaskNoticeTask3()
-{  
-  	//const TickType_t delayTime = pdMS_TO_TICKS( 1000UL ); 
-    u32 notice = 0;
-    while(1)
-    {
-        /*
-        if(xTaskNotifyWait(0, 0xFFFFFFFF, &notice, portMAX_DELAY) == pdTRUE)
-        {
-            switch(notice)
-            {
-                case 0x01:
-                    printf("notice : %d", notice);
-                break;
-                case 0x02:
-                    printf("notice : %d", notice);
-                break;
-            }
-        
-        }
-    */
-      
-        if(xTaskNotifyWait(0, 0xFFFFFFFF, &notice, portMAX_DELAY) == pdTRUE)
-        {
-            switch(notice)
-            {
-                case 0x00000001:
-                    xTimerStart(g_nTimDisposableTaskHandle, portMAX_DELAY);
-                    xTimerStart(g_nTimRepatTaskHandle, portMAX_DELAY);
-                    printf("notice : %d", notice);
-                break;
-                case 0x00000002:
-                    xTimerStop(g_nTimDisposableTaskHandle, portMAX_DELAY);
-                    xTimerStop(g_nTimRepatTaskHandle, portMAX_DELAY);
-                    printf("notice : %d", notice);
-                break;
-            }
-        
-        }
-      //  vTaskDelay(delayTime);
-    }
-}
-
-void Device_Tim1CallBackTask( TimerHandle_t pxTimer )
-{
-    static u32 time = 0;
-    
-    time++;
-    printf("Tim1Task Run Tick : %d", time);
-}
-
-void Device_Tim2CallBackTask( TimerHandle_t pxTimer )
-{
-    static u32 time = 0;
-    
-    time++;
-    printf("Tim2Task Run Tick : %d", time);
-    xTaskNotifyGive(Device_TaskNoticeTask2Handle);
-
-}
 
 //--

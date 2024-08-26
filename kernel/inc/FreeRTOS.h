@@ -861,11 +861,11 @@
     #define configPRE_SUPPRESS_TICKS_AND_SLEEP_PROCESSING( x )
 #endif
 
-#ifndef configPRE_SLEEP_PROCESSING                      //进入低功耗前的配置
+#ifndef configPRE_SLEEP_PROCESSING
     #define configPRE_SLEEP_PROCESSING( x )
 #endif
 
-#ifndef configPOST_SLEEP_PROCESSING                 //退出低功耗前的配置
+#ifndef configPOST_SLEEP_PROCESSING
     #define configPOST_SLEEP_PROCESSING( x )
 #endif
 
